@@ -1,0 +1,7 @@
+{
+  "Sandbox_SuQingRefrigeration": "蘇清的冷藏升级",
+  "Sandbox_SuQingRefrigeration_Enabled": "启用冷藏功能",
+  "Sandbox_SuQingRefrigeration_Enabled_tooltip": "关闭后保留改造记录；食物按正常环境继续腐坏。",
+  "Sandbox_SuQingRefrigeration_RotSpeedPercent": "冷藏腐坏速度（百分比）",
+  "Sandbox_SuQingRefrigeration_RotSpeedPercent_tooltip": "0=保持当前新鲜度；20=常温百分之二十的腐坏速度；100=正常速度。不会返鲜，不与冰箱或冷冻效果重复相乘。"
+}

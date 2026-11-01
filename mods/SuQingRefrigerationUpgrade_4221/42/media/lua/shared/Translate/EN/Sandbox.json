@@ -1,0 +1,7 @@
+{
+  "Sandbox_SuQingRefrigeration": "SuQing Refrigeration",
+  "Sandbox_SuQingRefrigeration_Enabled": "Enable refrigeration",
+  "Sandbox_SuQingRefrigeration_Enabled_tooltip": "Keeps upgrade records while returning food to ordinary aging.",
+  "Sandbox_SuQingRefrigeration_RotSpeedPercent": "Refrigerated spoilage speed (percent)",
+  "Sandbox_SuQingRefrigeration_RotSpeedPercent_tooltip": "0 preserves current freshness; 20 is twenty percent of ambient spoilage; 100 is normal. No rejuvenation or multiplicative stacking with fridges or freezers."
+}

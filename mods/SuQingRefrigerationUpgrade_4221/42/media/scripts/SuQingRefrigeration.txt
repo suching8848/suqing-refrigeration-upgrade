@@ -1,0 +1,43 @@
+module SuQingRefrigeration
+{
+    craftRecipe InstallCooling
+    {
+        Icon = Item_SQR_Module,
+        timedAction = MakingElectrical,
+        Time = 36,
+        NeedToBeLearn = False,
+        AllowBatchCraft = False,
+        Tags = InHandCraft,
+        category = SuQingRefrigeration,
+        OnTest = SuQingRefrigeration.TestRecipeInstall,
+        inputs
+        {
+            item 1 [Base.Bag_Schoolbag] mode:keep flags[IsNotWorn;AllowFavorite;ItemCount],
+            item 6 [Base.Battery] mode:destroy flags[ItemCount],
+            item 4 [Base.ElectricWire] mode:destroy flags[ItemCount],
+            item 4 [Base.ElectronicsScrap] mode:destroy flags[ItemCount],
+            item 2 [Base.SmallSheetMetal] mode:destroy flags[ItemCount],
+        }
+        outputs
+        {
+        }
+    }
+    craftRecipe RemoveCooling
+    {
+        Icon = Item_SQR_Remove,
+        timedAction = MakingElectrical,
+        Time = 12,
+        NeedToBeLearn = False,
+        AllowBatchCraft = False,
+        Tags = InHandCraft,
+        category = SuQingRefrigeration,
+        OnTest = SuQingRefrigeration.TestRecipeRemove,
+        inputs
+        {
+            item 1 [Base.Bag_Schoolbag] mode:keep flags[IsNotWorn;AllowFavorite;ItemCount],
+        }
+        outputs
+        {
+        }
+    }
+}

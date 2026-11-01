@@ -1,0 +1,79 @@
+{
+  "mode": "built-in image_gen",
+  "selectedUniqueAssets": 4,
+  "generatedCandidates": 5,
+  "referenceIdentity": "User provided original character image",
+  "assets": {
+    "avatar_final": {
+      "prompt": "Use case: stylized-concept. Generate one isolated production mod-list icon for Project Zomboid mod 蘇清的冷藏升级. Input image 1 is ONLY the definitive character identity and costume reference. Create a crisp chunky pixel-art CHIBI head-and-shoulders portrait of this same adult dragon woman: long ivory-white hair shaded pale lavender, violet eyes, two tall segmented ivory dragon horns, pointed ears, silver spiral-flower hair ornament with hanging ornaments, delicate white high-neck lace dress with pale lavender trim. Friendly calm smile, large expressive eyes. Add one small bold icy-cyan snowflake brooch centered at the high collar to identify refrigeration. Strong dark-purple outlines, simplified hard pixel clusters, legible at 64 pixels. Face fills most of square canvas; include both complete horns and hair ornament, comfortable transparent padding. Genuine transparent background. No scarf, backpack, hands, wings, tail, floating pet, scene, title, text, watermark or border. One icon only."
+    },
+    "module": {
+      "prompt": "Use case: stylized-concept. Generate one isolated production game icon for Project Zomboid mod 蘇清的冷藏升级. Input image 1 is a reference ONLY for the recurring character identity and pixel-art palette, not an edit target. Match crisp chunky pixel-art clusters, dark-purple outlines, olive canvas, lavender highlights, adding icy cyan for refrigeration. Strong simplified readability at 32-64 pixels. Genuine transparent background, complete silhouette, comfortable padding, no square backdrop, scene, watermark or title. Asset type: standalone 64px inventory/context-menu icon for permanent refrigeration upgrade. One compact olive-green canvas backpack with brown leather straps, brass buckles and a large clear icy-cyan snowflake emblem. A small silver cooling plate with a restrained cyan rim is attached to its front. Three-quarter view, strong simple silhouette, no lettering, no numbers, no character."
+    },
+    "switch": {
+      "prompt": "Use case: stylized-concept. Generate one isolated production game icon for Project Zomboid mod 蘇清的冷藏升级. Input image 1 is a reference ONLY for the recurring character identity and pixel-art palette, not an edit target. Match crisp chunky pixel-art clusters, dark-purple outlines, olive canvas, lavender highlights, adding icy cyan for refrigeration. Strong simplified readability at 32-64 pixels. Genuine transparent background, complete silhouette, comfortable padding, no square backdrop, scene, watermark or title. Asset type: standalone 64px context-menu icon for switching refrigeration on and off. One bold icy-cyan power-button symbol centered inside a simple dark-purple circular mechanical bezel, a small chunky six-armed snowflake at lower right. Readable clear open circular power sign and upright stem, no arrows, no text, no numbers, no backpack, no character."
+    },
+    "remove": {
+      "prompt": "Use case: stylized-concept. Generate one isolated production game icon for Project Zomboid mod 蘇清的冷藏升级. Input image 1 is a reference ONLY for the recurring character identity and pixel-art palette, not an edit target. Match crisp chunky pixel-art clusters, dark-purple outlines, olive canvas, lavender highlights, adding icy cyan for refrigeration. Strong simplified readability at 32-64 pixels. Genuine transparent background, complete silhouette, comfortable padding, no square backdrop, scene, watermark or title. Asset type: standalone 64px context-menu icon for removing a refrigeration upgrade and recovering materials. One small silver cooling plate with icy-cyan snowflake emblem, a thick lavender counterclockwise return arrow wraps around its upper and right contour. One simple copper-wire loop at lower left suggests recovered materials. No text, numbers, character, backpack, or tiny clutter."
+    }
+  },
+  "exports": [
+    {
+      "asset": "avatar_final",
+      "file": "icon.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "242e5bd98524581a142d3b29e03b191009de9acbcc909ba59f1f606ec5649606"
+    },
+    {
+      "asset": "avatar_final",
+      "file": "poster.png",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "867b3f78a6ee7c933a9afcfd0baacc96b798ba5045abb3fc37721cd35778bc00"
+    },
+    {
+      "asset": "module",
+      "file": "media/textures/Item_SQR_Module.png",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "917961c8884cee0b2999d3d4e57fe6a3b1b5c805dd377737d86107257476a19f"
+    },
+    {
+      "asset": "module",
+      "file": "media/ui/CategoryIcon/SuQingRefrigeration.png",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "917961c8884cee0b2999d3d4e57fe6a3b1b5c805dd377737d86107257476a19f"
+    },
+    {
+      "asset": "switch",
+      "file": "media/textures/Item_SQR_Switch.png",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "3d2def1d0538eb89b3cbf92d8e2b5498145756e0a00b38006d45d4169c2dd51f"
+    },
+    {
+      "asset": "remove",
+      "file": "media/textures/Item_SQR_Remove.png",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "19792425e8e4c0788eee536c99c406ed398d3400052ef89da0e1dc3a3c5d3f72"
+    }
+  ],
+  "technical_export": "RGBA resampling only; original generated art unchanged",
+  "source_images_included": false,
+  "note": "Final six in-game PNG exports are included. Machine-local generation paths and high-resolution source/reference images are omitted."
+}

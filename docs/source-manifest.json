@@ -1,0 +1,32 @@
+{
+  "mod_id": "SuQingRefrigerationUpgrade_4221",
+  "version": "1.0.0-rc.2-perf.1",
+  "purpose": "Hash inventory of the retained development package; not an in-game acceptance report.",
+  "sha256": {
+    "README.txt": "a9afd7fadc1b5c2b0197314ecc88dd43427614f7f9c2cb1877cda3f47d0e7ced",
+    "42/icon.png": "242e5bd98524581a142d3b29e03b191009de9acbcc909ba59f1f606ec5649606",
+    "42/mod.info": "d5400063d3b989ea35b6ed7215ef2361dfe3e5282a3378f0cd711133c8f7ef1c",
+    "42/poster.png": "867b3f78a6ee7c933a9afcfd0baacc96b798ba5045abb3fc37721cd35778bc00",
+    "common/README.txt": "8f21c438337416cb41f77ddab79500cb5c824f32999ae16b3d356070bf48fff7",
+    "42/media/sandbox-options.txt": "dbc6288287215cec935a304499ed87a9623d94780bce3c4b0b4e8e3a48395bae",
+    "42/media/scripts/SuQingRefrigeration.txt": "8d2e01133c9b846bafdaa47426a03b837711e1009067688bff6d02b9e1394b6f",
+    "42/media/textures/Item_SQR_Module.png": "917961c8884cee0b2999d3d4e57fe6a3b1b5c805dd377737d86107257476a19f",
+    "42/media/textures/Item_SQR_Remove.png": "19792425e8e4c0788eee536c99c406ed398d3400052ef89da0e1dc3a3c5d3f72",
+    "42/media/textures/Item_SQR_Switch.png": "3d2def1d0538eb89b3cbf92d8e2b5498145756e0a00b38006d45d4169c2dd51f",
+    "42/media/ui/CategoryIcon/SuQingRefrigeration.png": "917961c8884cee0b2999d3d4e57fe6a3b1b5c805dd377737d86107257476a19f",
+    "42/media/lua/client/SuQingRefrigeration_Crafting.lua": "dec3a3816842f74bb60f65fbe74fec1dcc9c85673428cb3ad5145e1d56ad49aa",
+    "42/media/lua/client/SuQingRefrigeration_Runtime.lua": "a393a8edaf30a1737d6afe8fac25d27dfee1a62a980e5acabeb81ff5de0e866f",
+    "42/media/lua/client/SuQingRefrigeration_UI.lua": "551c7572fc7313923a96317c8b8ae91743779a9639c746e0be493f14c729d3b8",
+    "42/media/lua/shared/SuQingRefrigeration/Core.lua": "34b90a69d41c9d6be1e04d50bfd2d852b18be6af87669f7d0073ca105798cb39",
+    "42/media/lua/shared/SuQingRefrigeration/Recipes.lua": "471b5c7810e8b57a0c4d6ebb4fb6f63436e4276ea2f2590633aebd774cb6f42d",
+    "42/media/lua/shared/Translate/CH/IG_UI.json": "b5af715346b3a800b36fc44902febf8cd5392e6220f6c2672c41f69ff462a45f",
+    "42/media/lua/shared/Translate/CH/Recipes.json": "94cd7c6fe1ea312163e5cba8e6736ea73b62d041081f7ecd4ec286d7ac4b5ce9",
+    "42/media/lua/shared/Translate/CH/Sandbox.json": "c929394a54ee5473d8aded52197aa092ecd797d116abe37c617dcdae733779a7",
+    "42/media/lua/shared/Translate/CN/IG_UI.json": "b5af715346b3a800b36fc44902febf8cd5392e6220f6c2672c41f69ff462a45f",
+    "42/media/lua/shared/Translate/CN/Recipes.json": "94cd7c6fe1ea312163e5cba8e6736ea73b62d041081f7ecd4ec286d7ac4b5ce9",
+    "42/media/lua/shared/Translate/CN/Sandbox.json": "c929394a54ee5473d8aded52197aa092ecd797d116abe37c617dcdae733779a7",
+    "42/media/lua/shared/Translate/EN/IG_UI.json": "05381145788ee9cc7160cf92a53ee16c250f2240670216c01c63637ae8932e77",
+    "42/media/lua/shared/Translate/EN/Recipes.json": "9a9f3d76484ff472987d4bf79554a4e7793851615052622d154987fa8a945884",
+    "42/media/lua/shared/Translate/EN/Sandbox.json": "97b1dd035a7e60f1039bb41af34084b15f3a8ccbfd49020522d54640a99eb5bc"
+  }
+}

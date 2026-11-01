@@ -1,0 +1,11 @@
+name=蘇清的冷藏升级
+namezh=蘇清的冷藏升级
+id=SuQingRefrigerationUpgrade_4221
+author=SuQing
+modversion=1.0.0-rc.2-perf.1
+versionMin=42.21
+versionMax=42.21
+icon=icon.png
+poster=poster.png
+loadModAfter=SuQingContainerUpgrade_4221,ExSuQingBackpackSuperUpgrade_4221,CleanUI,Neat_Crafting
+description=独立的B42.21单人装备容器冷藏改造。制作分类“蘇清·冷藏升级”提供安装、拆除；右键仅有已改造装备的制冷开关，制作提示沿用原生与CleanUI。6节电池、4电线、4电子废料、2小金属板，永久续航；实付返料一半。自动识别标准可穿戴容器；温度逐步下降，沙盒可设置腐坏速度。不返鲜、不改容量/减重/自重/储液。保留rc.1已有改造、开关与账本。

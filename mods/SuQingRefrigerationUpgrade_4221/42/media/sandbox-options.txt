@@ -1,0 +1,17 @@
+VERSION = 1,
+option SuQingRefrigeration.Enabled
+{
+    type = boolean,
+    default = true,
+    page = SuQingRefrigeration,
+    translation = SuQingRefrigeration_Enabled,
+}
+option SuQingRefrigeration.RotSpeedPercent
+{
+    type = double,
+    min = 0.0,
+    max = 100.0,
+    default = 20.0,
+    page = SuQingRefrigeration,
+    translation = SuQingRefrigeration_RotSpeedPercent,
+}
