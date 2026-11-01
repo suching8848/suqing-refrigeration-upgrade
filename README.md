@@ -12,7 +12,7 @@ Project Zomboid **Build 42.21 单人候选版 1.0.0-rc.2-perf.1**。Mod ID：`Su
 
 没有强制的第三方模组依赖。`loadModAfter` 为普通容器升级、EX、CleanUI、Neat Crafting 提供可选顺序提示，并不要求安装它们。原装备仍由原游戏或来源模组提供。
 
-相关本地兼容维护见[蘇清的综合补丁](https://github.com/suching8848/suqing-project-zomboid-patches)。本冷藏模组没有强制依赖该仓库的某个补丁；根据实际安装的来源模组选取适用项，不要整包全部启用。原生换位与特殊装备转换仍需实际验收。
+相关本地兼容维护见[蘇清的僵尸毁灭工程补丁合集](https://github.com/suching8848/suqing-project-zomboid-patches)。本冷藏模组没有强制依赖该仓库的某个补丁；根据实际安装的来源模组选取适用项，不要整包全部启用。原生换位与特殊装备转换仍需实际验收。
 
 ## 使用
 
@@ -39,3 +39,9 @@ Project Zomboid **Build 42.21 单人候选版 1.0.0-rc.2-perf.1**。Mod ID：`Su
 历史记录中用户确认了 rc.1 传奇背包制冷与开关正常。rc.2/perf.1 的原生制作入口、温度渐变、世界卸载、车内、特殊转换、暂停/睡觉/加速和实际性能仍需集中游戏验收。开发记录包含 Kahlua 与本机游戏原生类离线回归；模拟负载改进不代表实机 FPS 提升。多人和专用服务器未验证。
 
 本次 Git 整理保留开发包文件，不安装或更改个人存档。查看[测试与维护](docs/TESTING.md)、[素材来源](docs/ASSETS.md)、[更新记录](CHANGELOG.md)。
+
+## 相关项目与配置快照
+
+[全部 8 个模组与补丁仓库](docs/project-index.md) · [当前单人档 205 项启用顺序](docs/current-single-player-modlist.md) · [作者 Steam 合集](https://steamcommunity.com/sharedfiles/filedetails/?id=3823981387)
+
+源码索引涵盖 37 个 Mod ID。Steam 合集不附带独立本地补丁；按各项目的前置和条件兼容说明选择子项。启用快照不代表每个项目或新增版本均已通过游戏内验收。

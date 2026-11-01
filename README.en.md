@@ -39,3 +39,9 @@ Disabling does not refund payment or delete equipment, food or upgrade records. 
 Historical feedback confirmed rc.1 cooling and switching on a legendary backpack. rc.2/perf.1 native crafting, temperature transitions, world unloading, vehicles, special conversions, pause/sleep/fast-forward and actual performance still need focused in-game acceptance. Development records include offline Kahlua and installed-game native-class regression. Simulated workload improvements do not establish FPS gains. Multiplayer and dedicated servers are untested.
 
 This Git preparation preserves the development package and does not install it or alter personal saves. See [Testing and maintenance](docs/TESTING.md), [Asset provenance](docs/ASSETS.md) and [Changelog](CHANGELOG.md).
+
+## Related projects and setup snapshot
+
+[All eight mod and patch repositories](docs/project-index.md) · [Current 205-ID enabled order](docs/current-single-player-modlist.md) · [Author’s Steam collection](https://steamcommunity.com/sharedfiles/filedetails/?id=3823981387)
+
+The source index covers 37 Mod IDs. The Steam collection does not include separately installed local patches; select entries using each project’s requirements and conditional integration notes. Enabled state does not establish in-game acceptance of every project or new version.
