@@ -6,3 +6,4 @@
 *.md text eol=lf
 *.png binary
 mods/** -text
+mods/** whitespace=trailing-space,space-before-tab,cr-at-eol
