@@ -1,0 +1,75 @@
+{
+  "scope": "Source and offline verification only; no game/world/UI acceptance, installation, enabled-list change, publication or commit.",
+  "main_id": "SuQingRefrigerationUpgrade_4221",
+  "main_version": "1.0.0-rc.2-perf.8",
+  "native_id": "SuQingRefrigerationNative_4221",
+  "native_version": "0.1.0-rc.1",
+  "native_required_mods": [
+    "SuQingRefrigerationUpgrade_4221",
+    "ZombieBuddy"
+  ],
+  "game": "42.21.0 single-player",
+  "zombie_buddy": "2.3.4 exact version and SHA",
+  "results": {
+    "native_jvm": {
+      "report": "E:\\code\\suqing-refrigeration-upgrade\\native-backend\\validation\\native_integration_20261106T213310_519658Z\\report.json",
+      "result": "PASS",
+      "assertions": 225,
+      "failure_assertions": {
+        "missing-handle": 3,
+        "initial-conflict": 5,
+        "later-conflict": 5
+      },
+      "protected_unchanged": true,
+      "candidate": {
+        "sha256": "331720f30d01861480922374165fe81f711c5f3f4598641010f31b46293cffd8",
+        "mtime_ns": 1794000792044828400,
+        "size": 50592
+      },
+      "game_started": false,
+      "world_created": false
+    },
+    "native_policy": {
+      "report": "E:\\code\\suqing-refrigeration-upgrade\\native-backend\\validation\\native_policy_20261106T212622_835964Z\\report.json",
+      "result": "PASS",
+      "inputs_unchanged": true,
+      "game_started": false,
+      "world_created": false
+    },
+    "lua_lifecycle": {
+      "report": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\CoolingNativeBackend_20261107_0500\\lua_lifecycle_perf8_final\\report.json",
+      "result": "PASS",
+      "assertions": 122,
+      "cases": 22,
+      "inputs_unchanged": true,
+      "game_started": false,
+      "world_created": false
+    },
+    "real_zb_lua_api": {
+      "report": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\CoolingNativeBackend_20261107_0500\\actual_lua_api_first\\report.json",
+      "result": "PASS",
+      "assertions": 317,
+      "protected_unchanged": true,
+      "inputs_unchanged": true,
+      "game_started": false,
+      "world_created": false
+    },
+    "metadata": {
+      "report": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\CoolingNativeBackend_20261107_0500\\metadata_audit\\source-handoff.json",
+      "result": "PASS",
+      "game_started": false
+    },
+    "lunchbox_gates": {
+      "report": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\CoolingNativeBackend_20261107_0500\\lunchbox_validation\\gates-validation.json",
+      "result": "PASS",
+      "game_started": false
+    },
+    "lunchbox_combination": {
+      "report": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\CoolingNativeBackend_20261107_0500\\lunchbox_validation\\combination-validation.json",
+      "result": "PASS",
+      "game_started": false
+    }
+  },
+  "performance_fps_measured": false,
+  "full_save_loading_verified": false
+}

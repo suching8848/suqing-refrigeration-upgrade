@@ -1,0 +1,14 @@
+name=蘇清的冷藏性能补丁 / SuQing's Refrigeration Performance Patch
+namezh=蘇清的冷藏性能补丁
+id=SuQingRefrigerationNative_4221
+author=SuQing
+modversion=0.1.0-rc.1
+versionMin=42.21
+versionMax=42.21
+require=SuQingRefrigerationUpgrade_4221,ZombieBuddy
+loadModAfter=SuQingRefrigerationUpgrade_4221,ZombieBuddy,SuQingFreshnessLunchbox
+javaJarFile=media/java/client/SuQingRefrigerationNative.jar
+javaPkgName=suqing.refrigeration.nativebackend
+zbVersionMin=2.3.4
+zbVersionMax=2.3.4
+description=冷藏升级的可选Java性能补丁，建议大量冷藏食品时搭配使用。需要冷藏主模组perf.8和ZombieBuddy2.3.4，仅支持B42.21.0单人。由原生食品调度接管，采用原版FridgeFactor/FoodRotSpeed；自定义RotSpeedPercent不在Java模式生效。保留原有物品与付费记录，首次按ZB提示批准。安装、更换或停用后须完整退出重启。 / Optional Java performance companion for large refrigerated food inventories. Requires Cooling Upgrades perf.8 and ZombieBuddy2.3.4; B42.21.0 single-player only. Uses native food scheduling and vanilla FridgeFactor/FoodRotSpeed; custom RotSpeedPercent is Lua-only. Retains existing items/payment records. Approve through ZB when prompted and fully exit/restart after installation, replacement or disabling.

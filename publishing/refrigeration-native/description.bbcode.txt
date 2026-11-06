@@ -1,0 +1,28 @@
+[h1]蘇清的冷藏性能补丁[/h1]
+[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832223788]蘇清的冷藏升级[/url]的独立可选Java性能补丁。建议大容量随身容器、大量冷藏食品时使用。主模组仍可独立运行Lua；本补丁不提供物品或改造配方，不附封面和icon。
+
+[h2]必需依赖与顺序[/h2]
+需要冷藏主模组1.0.0-rc.2-perf.8及[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy2.3.4[/url]。仅审核B42.21.0单人。
+顺序：ZombieBuddy → 冷藏升级 → 返鲜餐盒（若使用）→ 本补丁。餐盒是可选配套，不是必需依赖。首次按ZB正常提示批准SuQingRefrigerationNative.jar；必须完整退出重启后生效。
+
+[h2]作用和规则[/h2]
+原生食品调度接管年龄、冷藏温度与冻融，停止Lua逐Tick全食品循环。使用原版FridgeFactor/FoodRotSpeed；Lua主模组的RotSpeedPercent不在Java模式生效。沿用现有装备、食品、改造费用、付费记录和开关，取放、切换及保存按边界同步。
+主模组与Java不会同时运行两套结算。版本不匹配或激活前失败保留Lua；运行中失败有明确停用/重启边界。新增、更换、禁用或移除补丁都须完整退出并重启，不能在运行中替换JAR。
+实现只读使用ZB私有Instrumentation字段，不修改游戏JAR或关闭批准。绑定2.3.4及其匹配JAR/食品字节码；框架或游戏更新后须重新适配，不能假定跨版本兼容。
+
+[h2]验证范围[/h2]
+原生方法、字节码、Lua生命周期及用户单人启动、接管和正常保存退出已验证，用户报告体感提升。没有受控FPS净增比例，效果随食品量、场景及其他模组变化；不声明联机/专服支持。
+
+[h1]SuQing's Refrigeration Performance Patch[/h1]
+Independent optional Java companion for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832223788]Refrigeration Upgrades[/url], recommended for large portable food inventories. The base remains usable alone. No items, recipes, cover or icon are included.
+
+Requires base1.0.0-rc.2-perf.8 and [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy2.3.4[/url], B42.21.0 SP only. Order: ZombieBuddy → base → Freshness Lunchbox(if used) → patch. Lunchbox is optional. Approve SuQingRefrigerationNative.jar through the normal ZB prompt and fully exit/restart.
+
+Native scheduling owns aging, cold temperature and freezing/thawing, stopping the Lua full-food Tick loop. Uses vanilla FridgeFactor/FoodRotSpeed; custom RotSpeedPercent is Lua-only. Existing equipment, food, payments and switches remain; transfers/switches/saving settle at boundaries. Ownership is exclusive. Pre-activation mismatches retain Lua; later faults have explicit deactivation/restart boundaries.
+
+Fully exit/restart before adding, replacing, disabling or removing the patch; never replace a running JAR. Reads a private ZB instrumentation field without changing the game JAR or disabling approval. Pinned to2.3.4 and matching JAR/Food bytecode; updates require reviewed adaptation.
+
+Native/offline and user SP activation/save/exit checks passed with subjective improvement. No controlled FPS percentage, multiplayer or dedicated-server support is claimed.
+Mod ID: SuQingRefrigerationNative_4221
+Source: https://github.com/suching8848/suqing-refrigeration-upgrade/tree/main/native-backend
+

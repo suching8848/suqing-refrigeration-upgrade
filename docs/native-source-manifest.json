@@ -1,0 +1,10 @@
+{
+  "mod_id": "SuQingRefrigerationNative_4221",
+  "version": "0.1.0-rc.1",
+  "purpose": "Public release preparation authorized 2026-11-07; runtime code matches user-tested deployment; see publication receipts for actual completion.",
+  "sha256": {
+    "42/media/java/client/SuQingRefrigerationNative.jar": "331720f30d01861480922374165fe81f711c5f3f4598641010f31b46293cffd8",
+    "42/mod.info": "034cb162305a2c1e8c880b3f37e54ef41eb213497eaad444edc8ffe1744ce6dd",
+    "common/README.txt": "3b0d7943ed992c1833c2b19e35fdeb41628748c429c3d20a3507c2e61c45b6c2"
+  }
+}

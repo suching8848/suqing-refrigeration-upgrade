@@ -8,3 +8,4 @@ __pycache__/
 validation/
 releases/
 *.zip
+native-backend/build/

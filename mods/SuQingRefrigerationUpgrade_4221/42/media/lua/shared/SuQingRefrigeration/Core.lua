@@ -3,7 +3,7 @@ SuQingRefrigeration = SuQingRefrigeration or {}
 local C = SuQingRefrigeration
 if C.coreLoaded then return C end
 C.coreLoaded = true
-C.version = "1.0.0-rc.2-perf.1"
+C.version = "1.0.0-rc.2-perf.8"
 C.key = "SuQingRefrigeration"
 C.foodKey = "SuQingRefrigerationFood"
 C.cost = { {"Base.Battery", 6}, {"Base.ElectricWire", 4},
@@ -198,6 +198,7 @@ function C.Toggle(character,item)
     local r=C.Record(item); if not C.Valid(r) then return false,"not_installed" end
     if C.Runtime then C.Runtime.SettleTree(item) end
     r.on=not r.on
+    if C.Runtime and C.Runtime.InvalidateState then C.Runtime.InvalidateState() end
     if C.Runtime then C.Runtime.ScanItem(item) end
     return true
 end
@@ -228,7 +229,10 @@ function C.Remove(character,item)
         item:getModData()[C.key]=r
     end
     C.locks[character]=nil
-    if succeeded then return true end
+    if succeeded then
+        if C.Runtime and C.Runtime.InvalidateState then C.Runtime.InvalidateState() end
+        return true
+    end
     return false,"rollback:"..tostring(errorMessage)
 end
 return C

@@ -1,0 +1,2 @@
+中文：首次独立发布。由原生食品调度接管冷藏食品，停止Lua全量Tick循环。需冷藏主模组perf.8与ZombieBuddy2.3.4，B42.21.0单人；无封面、poster或icon。
+English: initial separate release. Native food scheduling replaces the Lua full-food Tick sweep. Requires baseperf.8 and ZombieBuddy2.3.4, B42.21.0 SP; no cover/poster/icon.

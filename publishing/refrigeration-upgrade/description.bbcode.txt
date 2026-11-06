@@ -1,0 +1,27 @@
+[h1]蘇清的冷藏升级 / Refrigeration Upgrades[/h1]
+为标准可穿戴容器安装永久冷藏，保留原容量、减重、自重、外观、液体组件和收纳规则。食物不会返鲜；已有改造、开关和付款记录继续使用。
+
+[h2]性能提示与推荐补丁[/h2]
+[b]Lua模式需要持续处理被追踪的Food。大量冷藏食品会增加CPU开销，即使关闭背包也可能掉帧。大容量容器、数百件冷藏食品，建议搭配[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3834960443]蘇清的冷藏性能补丁[/url]。[/b]
+本主模组仍可单独使用，不强制安装Java。补丁为独立条目，需要本模组perf.8与[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy2.3.4[/url]，仅B42.21.0单人；首次正常批准JAR，安装、更换或停用后完整退出重启。
+Java模式由原生食品调度接管，停止Lua全食品Tick循环，采用原版FridgeFactor/FoodRotSpeed；自定义RotSpeedPercent只在Lua模式生效。已有物品和付款记录保留。
+
+[h2]制作和使用[/h2]
+主物品栏准备6节电池、4电线、4电子废料、2小金属板；卸下、清空装备及液体，在制作分类“蘇清·冷藏升级”安装。永久续航。右键只提供已改造装备的开关。拆除也走制作，返还实付材料的一半并保留电池电量凭据。
+Lua模式默认腐坏20%，可设0–100%；常温降到冷藏约20游戏分钟。标准可穿戴InventoryContainer自动识别，特殊过滤器遵循原许可；不改烧焦、污染、毒素、生熟或吃剩份量。
+
+[h2]兼容与范围[/h2]
+B42.21单人；多人/专服未验证。与普通容器升级、EX及返鲜餐盒可配合，保持来源装备和实际加载顺序。可选Lua显示合并精确审核至搜索增强0.1.1；0.1.2会安全停用该显示功能，Java接管不依赖它。用户已测试原生接管及保存退出并报告改善，没有受控FPS净增比例。
+
+[h1]English[/h1]
+Install permanent refrigeration on standard wearable storage while retaining capacity, weight, appearance, fluids, filters and existing paid records. This mod does not rejuvenate food.
+
+[b]Lua mode can be CPU-heavy with many tracked Food items, including with inventory panels closed. For high-capacity portable storage or hundreds of foods, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3834960443]SuQing's Refrigeration Performance Patch[/url] is recommended.[/b] The base remains independently usable. That separate optional Java companion requires this baseperf.8 and ZombieBuddy2.3.4, B42.21.0 SP only. Use normal JAR approval; fully exit/restart after installing, replacing or disabling it.
+Native mode stops the Lua full-food Tick sweep and uses vanilla FridgeFactor/FoodRotSpeed. Custom RotSpeedPercent is Lua-only; existing items/payments remain.
+
+Crafting requires6 batteries,4 wires,4 electronics scrap and2 small metal sheets. Unequip, empty and drain the target, then use SuQing Refrigeration crafting. Cooling has unlimited runtime; right-click toggles upgraded equipment. Craft removal refunds half the recorded payment without refilling batteries.
+Lua spoilage defaults to20%, configurable0–100%; ambient cooling takes roughly20 game minutes. Native filtering, food state and other storage stats remain. Optional display coalescing is audited for Search Enhancement0.1.1;0.1.2 disables it safely without preventing Java takeover. User SP activation/save/exit and subjective improvement are confirmed; no controlled FPS percentage or multiplayer support is claimed.
+
+Mod ID: SuQingRefrigerationUpgrade_4221
+Source: https://github.com/suching8848/suqing-refrigeration-upgrade
+

@@ -1,0 +1,2 @@
+中文：新增可选独立Java性能补丁桥接和大量食品性能提示，保留Lua独立运行与既有物品/付费记录。原生模式用原版冷藏/腐坏设置；自定义倍率仅Lua生效。用户单人确认接管与正常保存退出。
+English: optional independent Java backend handover and large-food-load guidance. Keeps standalone Lua and existing items/payments. Native mode uses vanilla factors; custom rate is Lua-only. User SP activation/save/exit confirmed.

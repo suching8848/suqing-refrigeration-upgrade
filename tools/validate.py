@@ -8,7 +8,7 @@ def main():
  actual={p.relative_to(MOD).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in MOD.rglob('*') if p.is_file()}
  assert actual==expected['sha256'],'Package differs from retained source snapshot'
  fields=dict(line.split('=',1) for line in (MOD/'42/mod.info').read_text(encoding='utf-8-sig').splitlines() if '=' in line)
- assert fields['id']=='SuQingRefrigerationUpgrade_4221' and fields['modversion']=='1.0.0-rc.2-perf.1'
+ assert fields['id']=='SuQingRefrigerationUpgrade_4221' and fields['modversion']==expected['version']
  for p in ROOT.rglob('*.json'):
   if '.git' not in p.parts and 'validation' not in p.parts:json.loads(p.read_text(encoding='utf-8-sig'))
  assets=json.loads((ROOT/'docs/asset-manifest.json').read_text(encoding='utf-8'))

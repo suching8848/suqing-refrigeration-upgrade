@@ -1,8 +1,8 @@
 # 测试与维护 / Testing and maintenance
 
-中文：本次Git整理只复制并核对开发包，不进行游戏验收。`python tools/validate.py`验证Mod ID/版本、全部25个源包文件哈希、JSON及PNG导出；它不启动游戏。`python tools/run_tests.py --game-dir <游戏目录> --javac <编译器>`在本机游戏Kahlua执行受控引擎fixture与真实原生配方解析；`--native-food`另运行Food原生类探针。测试输出保留在忽略的validation目录；不会读取正式存档、安装模组或改启用名单。
+中文：本次Git整理只复制并核对开发包，不进行游戏验收。`python tools/validate.py`验证Mod ID/版本、当前源包全部文件哈希、JSON及PNG导出；它不启动游戏。`python tools/run_tests.py --game-dir <游戏目录> --javac <编译器>`在本机游戏Kahlua执行受控引擎fixture与真实原生配方解析；`--native-food`另运行Food原生类探针。测试输出保留在忽略的validation目录；不会读取正式存档、安装模组或改启用名单。
 
-English: This Git preparation copies and hashes the development package without in-game acceptance. `python tools/validate.py` checks identity/version, all 25 source-package hashes, JSON and PNG exports without starting the game. `python tools/run_tests.py --game-dir <game directory> --javac <compiler>` runs controlled-engine Kahlua fixtures and the actual native recipe parser using the local game. `--native-food` additionally runs a native Food probe. Outputs go to ignored validation storage; no personal save, installed mod or enabled list is read or changed.
+English: This Git preparation copies and hashes the development package without in-game acceptance. `python tools/validate.py` checks identity/version, all current source-package hashes, JSON and PNG exports without starting the game. `python tools/run_tests.py --game-dir <game directory> --javac <compiler>` runs controlled-engine Kahlua fixtures and the actual native recipe parser using the local game. `--native-food` additionally runs a native Food probe. Outputs go to ignored validation storage; no personal save, installed mod or enabled list is read or changed.
 
 ## 游戏验收 / In-game acceptance
 
@@ -15,3 +15,6 @@ English: This Git preparation copies and hashes the development package without 
 `tools/build_translations.py`重建已有中英翻译；运行前检查diff。`tools/package_release.py --output <zip>`只打包仓库中的mods，拒绝覆盖既有zip。旧私人部署、读档审计、沙盒修改、备份与恢复脚本不纳入公开仓库。
 
 `tools/build_translations.py` rebuilds existing Chinese/English translations; review its diff. `tools/package_release.py --output <zip>` packages repository mods only and refuses to overwrite a ZIP. Old personal deployment, save auditing, sandbox mutation, backup and recovery scripts are excluded.
+
+perf.3：旧perf.1源包清单保留为source-manifest.perf1.json；source-manifest.json明确记录本次27文件候选，校验器核对其精确版本和哈希。新增StateCache与Display独立回归，完整Runtime事件、571食品负载计数及餐盒组合报告见本次交付目录。测试运行类路径包含本机PZO覆盖类；不会启动客户端或世界。
+perf.3: The retained perf.1 inventory remains source-manifest.perf1.json; source-manifest.json explicitly records the new27-file candidate and its exact version/hashes. New cache/display checks, Runtime event cases,571-food counts and lunchbox combination reports are retained with delivery. Test classpaths include the installed PZO overrides; no client/world is started.

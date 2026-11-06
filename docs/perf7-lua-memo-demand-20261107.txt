@@ -1,0 +1,51 @@
+冷藏Lua perf.7交付 / Refrigeration Lua perf.7 delivery
+2026-11-07，Asia/Shanghai
+
+状态
+冷藏1.0.0-rc.2-perf.7与餐盒0.1.0-rc.8-perf.7已本地部署；仅Lua优化，无新增Java补丁、JAR、加载器依赖或Java参数变动。没有启动游戏、提交Git或发布工坊。实机显示启用、玩法和FPS仍待用户验收。
+
+改动
+1. 后台食品只更新发现队列所需的弱容器归属，不再每Tick无条件采集全部显示签名。
+2. 最近500真实毫秒通过显示入口请求过的食品，仍采完整年龄、热量、lastAged、记录字段、容器与代际签名。首次／过期重开显示先严格结算，成功后再复用。兴趣时间存放在已有memo字段，不新增每食品弱表查询。
+3. 错误、外部改值、记录替换、归属变动、时间倒退及未知绘制包装仍走严格入口。首显占位仅按identity清理，不删除未知wrapper写入的替代memo，多返回与原错误对象保留。
+4. 原生老化、年龄上限、降温、冻融、取放、开关、发现、保存及ledger替换规则保持。全量逐Tick食品保护仍在；本次减轻其显示快照维护成本，没有把食品结算改成小时级。
+5. 餐盒只更新精确冷藏perf.7门禁和版本说明，返鲜、容量、模型、挂点及记录保持。
+
+证据及限制
+571食品、6容器、8历史、8Tick模型中，getAge18272→13704、getHeat9136→4568、getLastAged4568→0，合计少13704次getter（此模型约1713次／Tick）。nativeAge仍4568次，严格Cooling6次，Config/Integral各8次。571项Age/Heat/LastAged最大差0。
+三独立JVM，同进程双Runtime配对ABBAABBA，全部24块至少500ms；每块91360结算，各Runtime先暖机137040结算。方法级耗时中位分别减少4.75%、19.62%、12.69%。此测试复用一个真实Food，只隔离Lua结算与Java getter桥接，固定制冷归属，不是571独立原生食品、加载世界、UI或FPS测量。所有Age/Heat/LastAged/Freezing/ledger向量一致。不能将百分比换算成实机涨帧。
+第一版额外弱表查询候选及更早有限数内联没有稳定净收益，均未采用。
+
+验证
+新memo16场景82断言、旧运行期13场景61断言、2个真实NativeFood场景；既有冷藏业务/制作32场景365断言、原生方法240次推进；StateCache17场景654断言；Display73场景248检查；完整UI/Search注册链9场景277检查全部通过。
+餐盒精确支持perf.1–7各17场景633断言，未知8初装/漂移拒绝；组合mock31/267、三模组组合4/24、原生组合13/2181通过。临时只读诊断13场景170断言通过，新增memo_captures/memo_skips用于实际验证。
+
+主要路径
+源码：E:\code\suqing-refrigeration-upgrade
+源码：D:\steam\steamapps\common\ProjectZomboid\CodexRepos\suqing-freshness-lunchbox
+个人运行：C:\Users\15792\Zomboid\mods\SuQingRefrigerationUpgrade_4221
+个人运行：C:\Users\15792\Zomboid\mods\SuQingFreshnessLunchbox
+交付、冻结包及收据：D:\steam\steamapps\common\ProjectZomboid\CodexAssets\CoolingLuaPerf7_20261107_0405
+正式memo回归：E:\code\suqing-refrigeration-upgrade\validation\memo_demand_20261106T202455_654841Z\report.json
+配对方法计时：交付目录\native_paired_v2\20261106T202059_741483Z\report.json
+其余回归：交付目录\formal_checks、lunchbox_validation、diagnostics
+可复现入口：E:\code\suqing-refrigeration-upgrade\tools\memo_demand_validate.py
+
+保护及恢复
+deployment.json记录实际部署时间及所有SHA。只覆盖7个永久模组小文件和1个临时只读诊断文件，before/installed逐文件备份并校验；冷藏27、餐盒43文件ZIP逐成员读回一致。存档关键文件、配置、名单、Workshop ACF、启动器、AGENTS及其他受保护文件部署前后哈希一致。没有制作完整存档备份。
+回退应正常退出，先核当前hash和后续编辑，再只恢复本次8文件；不恢复世界进度、整份配置或名单。临时诊断不在冻结模组包中，清理时只处理其准确文件与原标记采样配置块，不删永久StateCache/Display。
+
+测试隔离事件
+一次早期离线命令误用PowerShell保留home变量，赋值失败后仍运行，使PZO自动兼容报告C:\Users\15792\Zomboid\pzopt\mod-compat.txt在04:12:06被重写。报告副本及情况在交付目录\test-isolation-incident。已修正后续隔离路径；既有运行配置、存档关键文件、名单均核对不变，后续正式检查明确核验真实报告/config/console的hash及mtime均不再变化。没有用旧配置或旧存档回滚。
+
+准则
+D:\steam\steamapps\common\ProjectZomboid\AGENTS.md第6.3节已按用户要求写入Lua优先优化、Java制作前须先说明并获明确许可、独立补丁及主模组中英依赖说明。Java任务已停止在只读调查阶段，没有写入或编译Java补丁原型。
+
+用户集中复测
+同一地点、缩放、物品和设置，进档解暂停正常运行约10秒，再开冷藏背包50秒、关包50秒、暂停30秒并正常退出。随后读取新日志同时核对显示实际启用、关包memoCaptures停止增长／memoSkips增长以及帧时间；不需用户分多轮只测启用。取放食品、切换制冷与保存重进由用户验证，离线检查不替代游戏验收。
+
+English
+Cold perf.7 and lunchbox rc.8-perf.7 are locally deployed as a Lua-only update. Background food retains weak ownership for discovery; only food requested through the display entry within500ms receives complete signatures. First or expired display settles strictly. All native aging/caps/freezing/cooling, transfers, switches, saves and ledger-replacement semantics remain. The full per-Tick protection loop remains; this reduces its display-bookkeeping overhead.
+The571-food model avoids13704 getters over8Ticks with identical state and4568 unchanged native calls. Three paired real-Food method benchmarks had lower medians, but reuse one Food and do not establish game FPS. Business/cache/display/full-registrar/lunchbox mock and native-method checks pass; actual user gameplay and FPS remain pending.
+Only7 permanent and1 temporary files were overwritten, exact backups and ZIP members verified. Protected hashes are unchanged. No Java patch, game launch, Git commit or Workshop upload occurred. One earlier offline test rewrote the generated PZO compatibility report; isolation was corrected and protected configuration/save/list files were verified unchanged. Details are retained with the isolation incident. Recovery is limited to the exact8 files after checking later changes, never a save/config/list rollback.
+AGENTS6.3 now requires Lua-first work and explicit permission before Java patch implementation, with independent packaging and bilingual dependency instructions in the main mod. User should perform one consolidated same-scene open/closed/paused capture, then food operations and save/reload acceptance.

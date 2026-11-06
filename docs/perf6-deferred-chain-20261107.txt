@@ -1,0 +1,34 @@
+冷藏perf.6本地修复记录 / Local refrigeration perf.6 repair
+2026-11-07，Asia/Shanghai
+
+本次用户启动日志（正常退出03:38:58）仍报告unreviewed renderer source，9条快照全部display_enabled=false/display_reuses=0。因此本轮短样本不能作为显示合并改善FPS的证据。
+
+原因及修正
+之前原生元数据预检构造了性能补丁作为外层入口，未执行完整注册时序。当前UIInteraction1.0.1在OnGameStart包装renderdetails，Search0.1.1在首次正常OnTick再包装。perf.6精确匹配实际选中的分支与活动版本；等待两个正常Tick和两次稳定入口观察后建立显示上下文。暂停启动继续严格结算，解暂停后安装。实际来源与原生首行记录到日志，后续renderer或Ordering helper替换时停用，不覆盖新函数。
+
+状态
+冷藏1.0.0-rc.2-perf.6、餐盒0.1.0-rc.8-perf.6已按deployment.json个人部署，游戏内启用和FPS仍待用户启动日志确认。餐盒仅新增精确版本支持；食品结算Runtime、StateCache、温度/腐坏数值和存档结构保持perf.5。没有启动游戏、提交Git或发布工坊。
+
+验证
+Display受控回归73场景248检查；完整执行已安装UIInteraction/Search注册器及Search依赖，9场景277检查，覆盖8种注册/事件顺序、暂停起步、实际闭包来源/首行、错误和后续替换。真实Core、ModInfo、231个ID；UI基类、选项与事件调度受控，未创建世界或UI。
+冷藏既有32场景365断言、原生方法240次推进、餐盒6版本各17场景600断言以及组合mock/native通过。不能把离线结果当游戏内验收。
+
+关背包剩余问题
+约571食品逐Tick保护循环仍在。早期缓存、批配置/积分共享、分帧扫描已减少部分成本，但perf.6本轮显示修复没有移除该循环。后续有限数内联审计候选虽在571×8模型中减少27408次Finite调用，短微基准一轮约快1.4%、另一轮反而较慢，证据不足，未移入正式源码或部署。ledger原地更新及getter少读也未实施，避免改变旧记录引用或外部包装语义。
+实际Java Food.updateAge可立即推进年龄，updateRotting可随后替换/删除食品，不能凭一小时轮询替代必要保护。Java后端是后续独立方案，当前未开发/安装。
+
+证据
+D:\steam\steamapps\common\ProjectZomboid\CodexAssets\CoolingDisplayChainFix_20261107_0347\deployment.json
+D:\steam\steamapps\common\ProjectZomboid\CodexAssets\CoolingDisplayBranchFix_20261107_0318\capture_20261107_033858
+D:\steam\steamapps\common\ProjectZomboid\CodexAssets\CoolingDisplayBranchFix_20261107_0318\whole_chain_validation\report.json
+D:\steam\steamapps\common\ProjectZomboid\CodexAssets\CoolingDisplayChainFix_20261107_0347\focused\result.json
+D:\steam\steamapps\common\ProjectZomboid\CodexAssets\CoolingTickInvestigation_20261107_0355
+
+保护与恢复
+仅覆盖7个永久模组文件和1个临时只读诊断文件，原件逐文件备份在本次artifact的before/installed，冷藏27/餐盒43文件冻结ZIP逐成员读回。存档关键文件、启用名单、配置、Workshop ACF和搜索/选择修复文件部署前后哈希一致；未创建完整存档备份。恢复前正常退出，核对后续改动和当前hash，只恢复本次8文件，不套用旧存档/配置/名单。
+临时采样配置仍保留，新的临时Lua哈希见deployment.json。后续采样结束只精确移除临时脚本及原标记配置块，不删除永久StateCache/Display。
+
+English
+The latest user session still rejected the renderer, with zero display reuse; no FPS gain is attributed to it. The earlier native metadata preflight constructed the performance-wrapper outer slot and did not reproduce the complete registration sequence. perf.6 supports the reviewed native-selected UIInteraction/Search wrappers and waits for deferred normal-Tick installation plus a stable slot. It records actual closure source/line and revokes on later renderer/helper replacement.
+Cold perf.6 and lunchbox rc.8-perf.6 are deployed locally with exact backups and frozen-member verification. The food Runtime, StateCache, values and save structure remain perf.5. Offline checks include73/248 display cases/checks and9/277 complete-registrar cases/checks. Native metadata/source APIs are real; UI/options/event timing are controlled. User startup and measured FPS remain pending.
+The571-food per-Tick protection loop remains. An additional finite-validation candidate reduced calls but did not demonstrate a consistent runtime improvement and was not adopted. The native aging/rotten replacement path prevents blindly switching to hourly settlement. A separate Java backend is a future design, not installed functionality. Only7 permanent and1 temporary files were overwritten; protected file hashes remain. No game was started, no Git commit or Workshop upload was made. Recovery is restricted to those8 files after checking later edits, never a save/config/list rollback.
