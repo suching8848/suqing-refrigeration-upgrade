@@ -1,4 +1,7 @@
-# 冷藏原生接管离线候选 / Native refrigeration offline candidate
+# 冷藏原生接管初次离线交付记录 / Initial native refrigeration offline delivery
+
+> 历史阶段快照：下文“尚未安装／提交／发布”等状态记录初次离线交付时点。此后已完成单人部署和用户实测；当前安装与发布状态见[中文说明](../README.md)、[英文说明](../README.en.md)及[本轮发布记录](cooling-release-20261107.md)。
+> Historical stage snapshot: statements below such as “not installed/committed/published” describe the initial offline delivery. Single-player deployment and user testing were completed later. Use the linked READMEs and current release record for the later state.
 
 2026-11-07，北京时间。已完成源码、构建、双语依赖说明及离线回归；尚未安装、启用、游戏内验收、提交或发布。
 

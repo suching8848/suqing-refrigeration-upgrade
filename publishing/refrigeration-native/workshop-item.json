@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "app_id": 108600,
+  "mod_id": "SuQingRefrigerationNative_4221",
+  "version": "0.1.0-rc.1",
+  "publishedfileid": "3834960443",
+  "workshop_item_id": "3834960443",
+  "workshop_url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3834960443",
+  "title": "冷藏性能补丁 / Refrigeration Performance Patch",
+  "state": "uploaded_verified_private_awaiting_steam_content_review",
+  "uploaded": true,
+  "upload_acknowledged": true,
+  "native_readback_verified": true,
+  "visibility_value": 2,
+  "visibility": "private",
+  "public": false,
+  "target_visibility_value": 0,
+  "content_tree_sha256": "942f7e5943aaff05483e00ac402525f4d527e4d3194c5e4e0d9b823f0ee15172",
+  "content_bytes": 54777,
+  "content_file_count": 3,
+  "required_workshop_ids": [
+    "3832223788",
+    "3619862853"
+  ],
+  "actual_workshop_children": [
+    "3832223788",
+    "3619862853"
+  ],
+  "preview_policy": "none",
+  "actual_preview_bytes": 0,
+  "recorded_at_bjt": "2026-11-07T06:54:55.694107+08:00",
+  "verified_at_bjt": "2026-11-07T06:54:10.233229+08:00",
+  "upload_receipt": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\UnifiedCoolingRelease_20261107_0634\\publication-receipts\\refrigeration-native\\upload-20261107-065012-e74d3db1.json",
+  "verification_receipt": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\UnifiedCoolingRelease_20261107_0634\\publication-receipts\\refrigeration-native\\read-20261107-065408-04622b77.json",
+  "frozen_release": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\UnifiedCoolingRelease_20261107_0634\\packages\\refrigeration-native\\release.json",
+  "identity_policy": "Reuse this Workshop item for future updates; never recreate it because an update or visibility change failed.",
+  "verification_scope": "Native successful content-submit callback plus uncached SDK readback of exact listing text, metadata tree hash, total bytes, tags, preview policy and dependencies. No remote member-by-member download and no additional gameplay test.",
+  "github_repository": "https://github.com/suching8848/suqing-refrigeration-upgrade",
+  "public_visibility_attempt": {
+    "result": 15,
+    "name": "AccessDenied",
+    "receipt": "D:\\steam\\steamapps\\common\\ProjectZomboid\\CodexAssets\\UnifiedCoolingRelease_20261107_0634\\publication-receipts\\refrigeration-native\\publish-20261107-065042-8d6c5b7a.json",
+    "blind_retry_performed": false
+  },
+  "platform_review_evidence": "Owner-provided Steam author-page screenshot on 2026-11-07: awaiting automated content analysis; temporarily hidden. This is page evidence and is not asserted as the exclusive cause of SDK result 15.",
+  "current_update_uploaded": true,
+  "artwork_included": false
+}
