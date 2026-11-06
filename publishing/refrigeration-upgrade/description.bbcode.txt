@@ -24,4 +24,3 @@ Lua spoilage defaults to20%, configurable0–100%; ambient cooling takes roughly
 
 Mod ID: SuQingRefrigerationUpgrade_4221
 Source: https://github.com/suching8848/suqing-refrigeration-upgrade
-

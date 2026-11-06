@@ -25,4 +25,3 @@ Fully exit/restart before adding, replacing, disabling or removing the patch; ne
 Native/offline and user SP activation/save/exit checks passed with subjective improvement. No controlled FPS percentage, multiplayer or dedicated-server support is claimed.
 Mod ID: SuQingRefrigerationNative_4221
 Source: https://github.com/suching8848/suqing-refrigeration-upgrade/tree/main/native-backend
-
