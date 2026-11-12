@@ -179,6 +179,29 @@ test("unconfirmed deactivation isolates and throws without legacy overlap",funct
     local again=pcall(R.Tick);eq(again,false)
     api.refuseStop=false;api.ready=true
 end)
+test("new Lua session shuts down stale Java without flushing old food",function()
+    for _,event in ipairs({"OnMainMenuEnter","OnPreMapLoad"}) do
+        local api=A.api();setup(api)
+        api.active,api.ready=true,true
+        eq(B.calls,nil);check(not R.ready)
+        emit(event)
+        eq(api.active,false);eq(api.ready,false);eq(count("shutdown"),1)
+        eq(count("activateOff"),0);eq(count("flush"),0)
+        emit("OnGameStart")
+        check(B.IsActive());eq(count("bootstrap"),1);eq(count("activateOn"),1)
+    end
+end)
+test("unconfirmed stale shutdown blocks Lua before world startup",function()
+    local api=A.api();setup(api)
+    api.active,api.ready,api.shutdownThrows=true,true,true
+    eq(pcall(emit,"OnPreMapLoad"),false)
+    check(B.blocked);check(api.active)
+    eq(pcall(emit,"OnGameStart"),false)
+    check(not R.ready);eq(count("bootstrap"),0)
+    api.shutdownThrows=false
+    emit("OnMainMenuEnter")
+    check(not B.blocked);check(not api.active)
+end)
 test("main menu shuts down and reload bootstraps once again",function()
     local api=A.api();setup(api);R.Start();emit("OnMainMenuEnter")
     eq(api.active,false);eq(B.IsActive(),false);eq(R.ready,false);eq(B.attempted,false)

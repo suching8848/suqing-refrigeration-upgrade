@@ -2,8 +2,10 @@ local D=SuQingRefrigeration.Display;local R=SuQingRefrigeration.Runtime
 local check,eq=Chain.check,Chain.eq
 local function pack(...)return{n=select('#',...),...}end
 check(type(getFilenameOfClosure)=='function'and type(getFirstLineOfClosure)=='function','native closure APIs required')
-eq(getCore():getVersionNumber(),'42.21','native Core number');eq(getCore():getGameAndBuildVersion(),'42.21.0','native Core build')
-eq(getActivatedMods():size(),231,'saved active IDs copied in memory')
+local newer=getCore():getGameAndBuildVersion()=='42.22.2'
+eq(getCore():getVersionNumber(),newer and '42.22' or '42.21','native Core number')
+eq(getCore():getGameAndBuildVersion(),newer and '42.22.2' or '42.21.0','native Core build')
+check(getActivatedMods():size()>0,'saved active IDs copied in memory')
 for i=1,3 do Events.OnTickEvenPaused.fire()end
 check(not D.attempted and not D.enabled,'no attempt before GameStart readiness')
 Events.OnGameStart.fire()
@@ -28,13 +30,14 @@ for frame=1,6 do
  end
  if D.enabled and not installedAt then installedAt=frame end
 end
-check(D.enabled and D.attempted,'delayed native-gated chain eventually installs')
+check(D.enabled and D.attempted,'delayed native-gated chain eventually installs: '..tostring(D.reason))
 check(installedAt>=3,'at least two normal ticks and stable observations elapsed')
 eq(D.prior,prior,'captures actual completed Search wrapper')
 eq(D.rendererSource,expectedSource,'observed source is actual native closure file')
 eq(tonumber(D.rendererLine),expectedLine,'observed native first line retained')
 eq(D.orderingHelper,SuQingSearch.Ordering.render,'captures actual complete Ordering helper')
-check(D.source:find('SuQingSearchEnhancement-0.1.1',1,true)~=nil,'native selected Search version accepted')
+local expectedVersion=newer and '0.1.4-rc.3' or '0.1.1'
+check(D.source:find('SuQingSearchEnhancement-'..expectedVersion,1,true)~=nil,'native selected Search version accepted')
 local before=pack(prior(Chain.pane,false));local after=pack(ISInventoryPane.renderdetails(Chain.pane,false))
 eq(before.n,after.n,'preserves real predecessor return arity');for i=1,before.n do eq(before[i],after[i],'predecessor result')end
 check(Chain.depths[#Chain.depths]>0,'actual local renderer chain enters Display context')

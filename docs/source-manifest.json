@@ -1,13 +1,13 @@
 {
   "mod_id": "SuQingRefrigerationUpgrade_4221",
   "version": "1.0.0-rc.2-perf.8",
-  "purpose": "Public release preparation authorized 2026-11-07; runtime code matches user-tested deployment; see publication receipts for actual completion.",
+  "purpose": "Exact B42.21 and B42.22.2 single-player Lua source snapshot. Offline checks passed; B42.22.2 gameplay testing is pending.",
   "sha256": {
     "42/icon.png": "242e5bd98524581a142d3b29e03b191009de9acbcc909ba59f1f606ec5649606",
     "42/media/lua/client/SuQingRefrigeration_Crafting.lua": "dec3a3816842f74bb60f65fbe74fec1dcc9c85673428cb3ad5145e1d56ad49aa",
-    "42/media/lua/client/SuQingRefrigeration_Display.lua": "ef19d0e7318b6d8dcdf9245c9f161a23628715d01ea013116fd558aa125bb2b4",
-    "42/media/lua/client/SuQingRefrigeration_Native.lua": "e15c06109cd37df22e10ba3587b89d345ae8ae8c60fdb6a234120cb4e3c8f99e",
-    "42/media/lua/client/SuQingRefrigeration_Runtime.lua": "1d43e6213850c956450c26686984ecb08d80384ff797ffb80195e748d1ddd73d",
+    "42/media/lua/client/SuQingRefrigeration_Display.lua": "f15c32eb2192dc2d7990ea161ab61e7798f3b5612eb7a33cb6d6d2a1db504925",
+    "42/media/lua/client/SuQingRefrigeration_Native.lua": "b7e8a022c826c384d83f680e84cb28a7167ff8a68963592b998f3223df3c57d6",
+    "42/media/lua/client/SuQingRefrigeration_Runtime.lua": "8f0cfe7e638fac01485879ca9f7fecedda6f13ec4dbf467a51eb747e2cb63af7",
     "42/media/lua/client/SuQingRefrigeration_UI.lua": "551c7572fc7313923a96317c8b8ae91743779a9639c746e0be493f14c729d3b8",
     "42/media/lua/shared/SuQingRefrigeration/Core.lua": "396258d53315990699f024cab8f11ecf00911f8ef16bde8a0efbc0df75e37cff",
     "42/media/lua/shared/SuQingRefrigeration/Recipes.lua": "471b5c7810e8b57a0c4d6ebb4fb6f63436e4276ea2f2590633aebd774cb6f42d",
@@ -27,9 +27,9 @@
     "42/media/textures/Item_SQR_Remove.png": "19792425e8e4c0788eee536c99c406ed398d3400052ef89da0e1dc3a3c5d3f72",
     "42/media/textures/Item_SQR_Switch.png": "3d2def1d0538eb89b3cbf92d8e2b5498145756e0a00b38006d45d4169c2dd51f",
     "42/media/ui/CategoryIcon/SuQingRefrigeration.png": "917961c8884cee0b2999d3d4e57fe6a3b1b5c805dd377737d86107257476a19f",
-    "42/mod.info": "28d90853270ddd3413f9263acab53368f9208a44e1896a29e06dca6120654552",
+    "42/mod.info": "f21f1149bf03a7e1843eceed44c5b40c08c9d34b9bdff4e27d11705cf699e260",
     "42/poster.png": "867b3f78a6ee7c933a9afcfd0baacc96b798ba5045abb3fc37721cd35778bc00",
-    "common/README.txt": "afdd39e41bd590cfa8eb14f73daea7c060117cf24ad9c644204be4dd1051f316",
-    "README.txt": "bdb46798b98426e9449cebc18f36e1a5b65d503c3951a0df87648db95046038d"
+    "common/README.txt": "cd99b9d2bd63098da0c1d245fbe447869559f24255121d1310ac0d82fc8f1e71",
+    "README.txt": "40d4253cf5c937f82ea8143a3a041373c796b0421e3b068dfdb552cc69ab38ae"
   }
 }

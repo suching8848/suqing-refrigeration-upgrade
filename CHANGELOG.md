@@ -1,5 +1,11 @@
 # 更新记录 / Changelog
 
+## B42.22.2 Lua 单人适配 / B42.22.2 single-player Lua compatibility
+
+支持 B42.21 和 B42.22.2 单人 Lua 模式，沿用 perf.8 兼容标识、随身装备、冷藏开关和付款记录。B42.22.2 的 Lua 显示合并适用于工坊 CleanUI 2.10.5 的 42.22 分支及已审核的可选库存包装器（批量转移 1.2.4、融合选区 1.0.3、搜索增强 0.1.4-rc.3）。未知包装、Snake Utils 和实际操作继续即时结算。Java 接管后的食品老化沿用原生处理。两版离线回归通过，B42.22.2 游戏内验收待完成。
+
+Supports single-player Lua on B42.21 and B42.22.2. The perf.8 compatibility identifier, equipment, cooling switches and payment records remain valid. On B42.22.2, Lua display coalescing supports the Workshop CleanUI 2.10.5 42.22 branch and its audited optional inventory wrappers (Transfer Performance 1.2.4, Proximity Selection 1.0.3, Search Enhancement 0.1.4-rc.3). Unknown renderers, Snake Utils and actual actions use immediate settlement. Active Java takeover retains native food aging. Offline regression passed on both versions; B42.22.2 gameplay testing is pending.
+
 ## 1.0.0-rc.2-perf.8 / Native companion0.1.0-rc.1 — 2026-11-07
 
 中文：配套独立Java冷藏性能补丁，原生调度接管后停止Lua逐Tick全食品扫描。主模组说明明确大量食品CPU开销，建议大容量库存搭配补丁；Java可选，需原主模组和ZombieBuddy2.3.4。沿用物品、费用、付款记录及schema；Java采用原版FridgeFactor/FoodRotSpeed，RotSpeedPercent仅Lua生效。真实单人日志及用户反馈确认接管和正常退出，不宣称受控FPS比例。搜索增强0.1.2仍保守停用可选Lua显示合并；没有放宽未审核门禁。Java补丁独立工坊条目，不附封面、poster或icon。

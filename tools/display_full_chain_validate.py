@@ -6,6 +6,7 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
  p=argparse.ArgumentParser();p.add_argument('--game-dir',type=Path,required=True);p.add_argument('--javac',type=Path,required=True)
  p.add_argument('--mods-list',type=Path,required=True);p.add_argument('--output-dir',type=Path,required=True)
+ p.add_argument('--reviewed-ui-root',type=Path,help='Directory containing the reviewed 42.22 transfer, proximity, and Search candidates.')
  a=p.parse_args();game=a.game_dir.resolve();out=a.output_dir.resolve();out.mkdir(parents=True,exist_ok=True);classes=out/'classes';classes.mkdir(exist_ok=True)
  roots={
  'P4HasBeenRead':Path(r'D:\steam\steamapps\workshop\content\108600\2544353492\mods\P4HasBeenRead'),
@@ -16,6 +17,12 @@ def main():
  'SuQingUIInteractionFixes':Path(r'C:\Users\15792\Zomboid\mods\SuQingUIInteractionFixes'),
  'SuQingSearchEnhancement':Path(r'C:\Users\15792\Zomboid\mods\SuQingSearchEnhancement'),
  'SuQingRefrigerationUpgrade_4221':ROOT/'mods/SuQingRefrigerationUpgrade_4221'}
+ if a.reviewed_ui_root:
+  ui=a.reviewed_ui_root.resolve()
+  for mod,folder in [('Codex_InventoryTransferPerformance_4221','InventoryTransferPerformance_4221_Local'),
+                     ('SuQingUIInteractionFixes','SuQingUIInteractionFixes'),
+                     ('SuQingSearchEnhancement','SuQingSearchEnhancement')]:
+   roots[mod]=ui/folder
  mapping=out/'native_roots.tsv';mapping.write_text(''.join(k+'\t'+str(v)+'\n'for k,v in roots.items()),encoding='utf-8')
  search=roots['SuQingSearchEnhancement']/'42/media/lua';cold=ROOT/'mods/SuQingRefrigerationUpgrade_4221/42/media/lua'
  paths=[mapping,a.mods_list.resolve(),cold/'shared/SuQingRefrigeration/Core.lua',ROOT/'tests/display_full_chain_dependencies.lua',
@@ -40,7 +47,7 @@ def main():
  cases=re.findall(r'FULL_CHAIN_CASE (\S+) checks=(\d+) PASS; source=([^;]+); firstline=(\d+); proxline=(\d+); installedFrame=(\d+)',last)
  if len(cases)!=len(config)or'CHAIN_NATIVE_PASS'not in last:raise RuntimeError('Missing complete-chain success evidence')
  report={'result':'PASS','time':datetime.datetime.now().astimezone().isoformat(),'cases':len(cases),'checks':sum(int(x[1])for x in cases),'case_results':[dict(name=x[0],checks=int(x[1]),renderer_source=x[2],renderer_firstline=int(x[3]),proximity_firstline=int(x[4]),installed_frame=int(x[5]))for x in cases],
- 'source_sha256':after,'game_started':False,'world_loaded':False,'ui_created':False,'native_core_and_metadata':True,'active_ids_copied_from_saved_list':231,
- 'scope':'Complete unchanged installed UIInteraction and Search registrar files plus complete Search Core/Text/Settings/Ordering. Native Kahlua/source/firstline/Core/ModInfo for eight roots and 231 saved IDs; controlled base renderer, ModOptions, zero players and event dispatch timing. No actual game UI, world, render geometry, performance or gameplay acceptance.'}
+ 'source_sha256':after,'game_started':False,'world_loaded':False,'ui_created':False,'native_core_and_metadata':True, 'active_ids_copied_from_saved_list':int(re.search(r'CHAIN_NATIVE_ACTIVE_IDS\s+(\d+)',last)[1]),
+ 'scope':'Complete unchanged installed UIInteraction and Search registrar files plus complete Search Core/Text/Settings/Ordering. Native Kahlua/source/firstline/Core/ModInfo for eight roots and the selected saved IDs; controlled base renderer, ModOptions, zero players and event dispatch timing. No actual game UI, world, render geometry, performance or gameplay acceptance.'}
  (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print(json.dumps(report,ensure_ascii=False))
 if __name__=='__main__':main()

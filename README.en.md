@@ -2,7 +2,7 @@
 
 [中文](README.md) · [English](README.en.md)
 
-Project Zomboid **Build 42.21 single-player candidate 1.0.0-rc.2-perf.8**. Mod ID: `SuQingRefrigerationUpgrade_4221`.
+Project Zomboid **Build 42.21 / 42.22.2 single-player candidate 1.0.0-rc.2-perf.8**. Mod ID: `SuQingRefrigerationUpgrade_4221`.
 
 Install permanent refrigeration on existing standard wearable storage equipment while keeping original capacity, weight reduction, weight, appearance, equipment slots, fluid components and storage filters. Ordinary Container Upgrades and Backpack Super Upgrades are optional; this mod can coexist with them. Food is not rejuvenated.
 
@@ -16,7 +16,9 @@ Native food scheduling owns aging, cold temperature and freezing/thawing and sto
 
 Approve the JAR through normal ZombieBuddy prompts. Fully exit and restart after adding, replacing, disabling or removing Java; never replace a running JAR. The patch reads ZB's private `Loader.g_instrumentation` without modifying the game JAR or disabling approval. Exact version/JAR/Food-bytecode gates reject unreviewed combinations. Legacy Lua flushes before confirmed native activation ends the old loop. Absence/mismatch before activation retains Lua; later faults have explicit deactivation/restart boundaries. See [backend notes](native-backend/README.md).
 
-User single-player testing and two fresh logs confirm native takeover, the old Lua sweep stopping and normal save/exit, with a reported subjective improvement. No controlled same-load FPS percentage or multiplayer acceptance is claimed. **Optional Lua display coalescing precisely supports reviewed Search Enhancement0.1.1; version0.1.2 safely disables that display feature.** Native takeover remains independent, and the guard is not relaxed to assume compatibility with a new renderer.
+User single-player testing and two fresh logs confirm native takeover, the old Lua sweep stopping and normal save/exit, with a reported subjective improvement. No controlled same-load FPS percentage or multiplayer acceptance is claimed.
+
+On B42.22.2, Lua display coalescing supports the Workshop CleanUI 2.10.5 42.22 branch and its audited optional inventory wrappers (Transfer Performance 1.2.4, Proximity Selection 1.0.3, Search Enhancement 0.1.4-rc.3). Unknown renderers, Snake Utils and actual actions use immediate settlement. Active Java takeover retains native food aging.
 
 ## perf.7 display-demand snapshots (2026-11-07)
 

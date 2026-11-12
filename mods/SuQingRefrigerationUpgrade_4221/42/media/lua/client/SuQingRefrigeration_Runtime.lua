@@ -444,6 +444,7 @@ function R.RebuildLegacy()
 end
 function R.Start()
     if not C.SP() or R.ready then return end
+    if N then N.AssertUsable() end
     local meta=__classmetatables and Food and __classmetatables[Food.class]
     local index=meta and meta.__index
     if not index or not index.updateAge or not ISTransferAction or not ISTransferAction.transferItem then
@@ -496,6 +497,12 @@ function R.Start()
     if N then N.TryStart(R) end
     print("[SuQingRefrigeration] "..C.version.." single-player cooling ready")
 end
+-- The mod may be loaded only for the save and miss the default menu session.
+Events.OnPreMapLoad.Add(function()
+    if R.ready or not N then return end
+    local ok,message=N.Shutdown()
+    if not ok then error(message,0) end
+end)
 Events.OnGameStart.Add(R.Start)
 Events.OnTick.Add(R.Tick)
 Events.OnTickEvenPaused.Add(function()

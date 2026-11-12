@@ -1,4 +1,4 @@
--- Display-only context for the audited B42.21 inventory renderer.
+-- Display-only context for reviewed B42 inventory renderers.
 -- No item timing, transfers or UI renderer implementation is replaced here.
 require "SuQingRefrigeration_Runtime"
 local C=SuQingRefrigeration
@@ -7,7 +7,7 @@ C.Display=C.Display or {}
 local D=C.Display
 if D.loaded then return D end
 D.loaded=true
-D.compatRevision="deferred-render-chain-3"
+D.compatRevision="deferred-render-chain-4"
 D.enabled=false
 D.attempted=false
 D.normalTicks=0
@@ -69,17 +69,16 @@ local function reviewedRenderer(fn)
     end
     local ok,gameVersion=pcall(function()return getCore():getVersionNumber()end)
     if not ok then return nil,"game version query failed: "..tostring(gameVersion) end
-    -- Core.getVersionNumber() is GameVersion.toString(): the current native
-    -- value is "42.21". Core.getGameAndBuildVersion()/the boot log add ".0".
-    -- Accept only these two equivalent representations, never another build
-    -- number, neighbouring version or arbitrary suffix.
-    if type(gameVersion)~="string" or (gameVersion~="42.21" and gameVersion~="42.21.0") then
+    -- The short Core version omits the build suffix.
+    local newer=gameVersion=="42.22"
+    if not newer and gameVersion~="42.21" and gameVersion~="42.21.0" then
         return nil,"unsupported game version: "..tostring(gameVersion)
     end
     D.gameVersion=gameVersion
     local buildOk,gameBuild=pcall(function()return getCore():getGameAndBuildVersion()end)
     if not buildOk then return nil,"game build query failed: "..tostring(gameBuild) end
-    if type(gameBuild)~="string" or gameBuild~="42.21.0" then
+    local expectedBuild=newer and "42.22.2" or "42.21.0"
+    if gameBuild~=expectedBuild then
         return nil,"unsupported game build: "..tostring(gameBuild)
     end
     D.gameBuild=gameBuild
@@ -89,14 +88,26 @@ local function reviewedRenderer(fn)
         return mods:contains("CleanUI") or mods:contains("\\CleanUI")
     end)
     if not ok then return nil,"active UI metadata unavailable" end
-    if clean and version("CleanUI")~="2.10.4" then return nil,"unsupported CleanUI version" end
-    -- A reviewed outer wrapper can capture these known inner wrappers. A
-    -- later version of either needs review even when its source is not outermost.
-    for _,entry in ipairs({{"CleanUI","2.10.4","42.19"},
+    local cleanVersion=newer and "2.10.5" or "2.10.4"
+    local cleanBranch=newer and "42.22" or "42.19"
+    local performanceVersion=newer and "1.2.4" or "1.2.2"
+    local proximityVersion=newer and "1.0.3" or "1.0.1"
+    local searchVersion=newer and "0.1.4-rc.3" or "0.1.1"
+    if newer and not clean then return nil,"B42.22.2 renderer outside reviewed CleanUI chain" end
+    if clean and version("CleanUI")~=cleanVersion then return nil,"unsupported CleanUI version" end
+    if newer and (CleanUI_SnakeUtilsRenderCompatInstalled
+        or mods:contains("SMP_SnakeUtilsPack") or mods:contains("\SMP_SnakeUtilsPack")) then
+        return nil,"unsupported CleanUI Snake Utils renderer"
+    end
+    -- A reviewed outer wrapper can capture inner wrappers. Check each
+    -- active participant's selected version and branch before opening the context.
+    local reviewedDirs={}
+    for _,entry in ipairs({{"CleanUI",cleanVersion,cleanBranch},
         {"PinyinSearch_SafeSources_4221_LocalFix","1.1","42"},
-        {"Codex_InventoryTransferPerformance_4221","1.2.2","42"},
+        {"Codex_InventoryTransferPerformance_4221",performanceVersion,"42"},
         {"NeatUI_Equipment","1.0.2","42.20"},
-        {"SuQingUIInteractionFixes","1.0.1","42"},{"SuQingSearchEnhancement","0.1.1","42"}})do
+        {"SuQingUIInteractionFixes",proximityVersion,"42"},
+        {"SuQingSearchEnhancement",searchVersion,"42"}})do
         local activeOk,active=pcall(function()return mods:contains(entry[1]) or mods:contains("\\"..entry[1])end)
         if not activeOk then return nil,"active wrapper metadata unavailable" end
         if active then
@@ -108,7 +119,11 @@ local function reviewedRenderer(fn)
             if not dirOk or not dir or not ends(dir,"/"..entry[3]) then
                 return nil,"unsupported active branch "..entry[1]
             end
+            reviewedDirs[entry[1]]=dir
         end
+    end
+    if newer and not ends(reviewedDirs.CleanUI,"/3437629766/mods/cleanui/"..cleanBranch) then
+        return nil,"unreviewed CleanUI source directory"
     end
     local p4ActiveOk,p4Active=pcall(function()return mods:contains("P4HasBeenRead") or mods:contains("\\P4HasBeenRead")end)
     if not p4ActiveOk then return nil,"active P4 metadata unavailable" end
@@ -122,11 +137,12 @@ local function reviewedRenderer(fn)
     ok,source=pcall(getFilenameOfClosure,fn)
     source=ok and normalized(source) or nil
     if not source then return nil,"renderer source unavailable" end
-    -- These two later local wrappers are presentation-only. Match the native
-    -- selected branch, rather than trusting a basename or folder suffix.
+    local cleanLabel=clean and "/CleanUI-"..cleanVersion or "/vanilla"
+    -- These local wrappers participate in presentation only. Verify the
+    -- selected source and the audited first executable line on B42.22.2.
     for _,entry in ipairs({
-        {"SuQingUIInteractionFixes","1.0.1","suqing_proximityselectionfix.lua"},
-        {"SuQingSearchEnhancement","0.1.1","suqingsearch/runtime.lua"}})do
+        {"SuQingUIInteractionFixes",proximityVersion,"suqing_proximityselectionfix.lua",226},
+        {"SuQingSearchEnhancement",searchVersion,"suqingsearch/runtime.lua",376}})do
         local infoOk,dir=pcall(function()
             local info=getModInfoByID(entry[1]) or getModInfoByID("\\"..entry[1])
             return info and info:getVersionDir() or nil
@@ -137,9 +153,12 @@ local function reviewedRenderer(fn)
                 or version(entry[1])~=entry[2] or not ends(dir,"/42") then
                 return nil,"unsupported local renderer branch: "..entry[1]
             end
+            if newer and tonumber(D.rendererLine)~=entry[4] then
+                return nil,"unreviewed local renderer entry: "..entry[1]
+            end
             if entry[1]=="SuQingUIInteractionFixes" then
                 local bridge=SuQingUIInteractionFixes and SuQingUIInteractionFixes.proximitySelection
-                if not clean or type(bridge)~="table" or bridge.version~="1.0.1" or bridge.installed~=true or bridge.enabled~=true then
+                if not clean or type(bridge)~="table" or bridge.version~=proximityVersion or bridge.installed~=true or bridge.enabled~=true then
                     return nil,"proximity selection renderer not ready"
                 end
             elseif type(SuQingSearch)~="table" or SuQingSearch.rendererInstalled~=true then
@@ -147,12 +166,14 @@ local function reviewedRenderer(fn)
             else
                 local helper=SuQingSearch.Ordering and SuQingSearch.Ordering.render
                 local helperOk,helperSource=pcall(getFilenameOfClosure,helper)
-                if not helperOk or normalized(helperSource)~=dir.."/media/lua/client/suqingsearch/ordering.lua" then
+                local helperLineOk,helperLine=pcall(getFirstLineOfClosure,helper)
+                if not helperOk or normalized(helperSource)~=dir.."/media/lua/client/suqingsearch/ordering.lua"
+                    or (newer and (not helperLineOk or helperLine~=393)) then
                     return nil,"unreviewed search ordering helper"
                 end
                 D.orderingHelper=helper
             end
-            return entry[1].."-"..entry[2]..(clean and "/CleanUI-2.10.4" or "/vanilla")
+            return entry[1].."-"..entry[2]..cleanLabel
         end
     end
     local base="media/lua/client/isui/isinventorypane.lua"
@@ -160,14 +181,24 @@ local function reviewedRenderer(fn)
         or (ends(source,"/"..base) and not source:find("/mods/",1,true)
             and not source:find("/workshop/",1,true)))
     if vanilla and not clean then return "vanilla" end
-    if clean and ends(source,"/3437629766/mods/cleanui/42.19/"..base) then return "CleanUI-2.10.4" end
+    local cleanDir=reviewedDirs.CleanUI
+    local cleanSource=clean and ends(source,"/3437629766/mods/cleanui/"..cleanBranch.."/"..base)
+    if cleanSource and (not newer or (cleanDir and source==cleanDir.."/"..base
+        and tonumber(D.rendererLine)==5678)) then
+        return "CleanUI-"..cleanVersion
+    end
     if ends(source,"/inventorytransferperformance_4221_local/42/media/lua/client/codex_inventorytransferperformance.lua") then
         local m=CodexInventoryTransferPerformance
-        if type(m)=="table" and m.installed==true and m.version=="1.2.2" and clean then
-            return "InventoryTransferPerformance-1.2.2/CleanUI-2.10.4"
+        local perfDir=reviewedDirs.Codex_InventoryTransferPerformance_4221
+        if type(m)=="table" and m.installed==true and m.version==performanceVersion and clean
+            and (not newer or (perfDir and tonumber(D.rendererLine)==445
+                and source==perfDir.."/media/lua/client/codex_inventorytransferperformance.lua")) then
+            return "InventoryTransferPerformance-"..performanceVersion..cleanLabel
         end
         return nil,"unsupported inventory performance wrapper"
     end
+    -- B42.22.2 was audited only with a CleanUI or local presentation entry.
+    if newer then return nil,"unreviewed B42.22.2 renderer source" end
     if ends(source,"/pinyin_ui_4221_localcompat/42/media/lua/client/pinyinsafecompat.lua")
         and version("PinyinSearch_SafeSources_4221_LocalFix")=="1.1" then
         return clean and "Pinyin-1.1/CleanUI-2.10.4" or "Pinyin-1.1/vanilla"
@@ -188,6 +219,9 @@ function D.Check()
     if ISInventoryPane~=D.class or D.class.renderdetails~=D.wrapper then
         observe(type(ISInventoryPane)=="table" and ISInventoryPane.renderdetails or nil)
         return stop("renderer was replaced after installation")
+    end
+    if D.gameBuild=="42.22.2" and CleanUI_SnakeUtilsRenderCompatInstalled then
+        return stop("CleanUI Snake Utils renderer appeared after installation")
     end
     if D.orderingHelper and (type(SuQingSearch)~="table" or type(SuQingSearch.Ordering)~="table"
         or SuQingSearch.Ordering.render~=D.orderingHelper) then

@@ -6,6 +6,7 @@ local function pack(...)return {n=select("#",...),...}end
 local function test(name,fn)cases=cases+1;fn()end
 local VANILLA="D:/steam/steamapps/common/ProjectZomboid/media/lua/client/ISUI/ISInventoryPane.lua"
 local CLEAN="D:/steam/steamapps/workshop/content/108600/3437629766/mods/CleanUI/42.19/media/lua/client/ISUI/ISInventoryPane.lua"
+local CLEANNEW=CLEAN:gsub("/42.19/","/42.22/")
 local PERF="C:/Users/test/Zomboid/mods/InventoryTransferPerformance_4221_Local/42/media/lua/client/Codex_InventoryTransferPerformance.lua"
 local PINYIN="C:/Users/test/Zomboid/mods/Pinyin_UI_4221_LocalCompat/42/media/lua/client/PinyinSafeCompat.lua"
 local P4="D:/steam/steamapps/workshop/content/108600/2544353492/mods/P4HasBeenRead/42/media/lua/client/P4HasBeenRead.lua"
@@ -48,17 +49,21 @@ local function fixture(options)
         return info
     end
     getFilenameOfClosure=function(fn)if o.sourceError then error("injected source failure")end;return sources[fn]end
-    getFirstLineOfClosure=function()return 240 end
+    local lines={}
+    getFirstLineOfClosure=function(fn)return lines[fn] or 240 end
+    CleanUI_SnakeUtilsRenderCompatInstalled=o.snake==true and true or nil
     if o.noSourceAPI then getFilenameOfClosure=nil end
     CodexInventoryTransferPerformance={installed=o.perfInstalled~=false,version=o.perfVersion or "1.2.2"}
     SuQingUIInteractionFixes={proximitySelection={version=o.proxVersion or "1.0.1",installed=o.proxInstalled~=false,enabled=o.proxEnabled~=false}}
     SuQingSearch={rendererInstalled=o.searchInstalled~=false,Ordering={render=function()end}}
     sources[SuQingSearch.Ordering.render]=o.helperSource or SEARCHDIR.."/media/lua/client/SuQingSearch/Ordering.lua"
+    lines[SuQingSearch.Ordering.render]=o.helperLine
     local C={Runtime={ready=o.ready~=false},SP=function()return o.multiplayer~=true end}
     SuQingRefrigeration=C
     local context={C=C,R=C.Runtime,callbacks=callbacks,sources=sources,logs=logs}
     local prior=o.prior or function(...)return ... end
     ISInventoryPane={renderdetails=prior};sources[prior]=o.source or VANILLA
+    lines[prior]=o.rendererLine
     context.prior=prior;context.class=ISInventoryPane
     local chunk=assert(loadstring(DISPLAY_MODULE_SOURCE,DISPLAY_MODULE_PATH))
     context.D=chunk()
@@ -73,15 +78,32 @@ local function fixture(options)
     return context
 end
 
+local function newer(options)
+    local values={game="42.22",build="42.22.2",clean=true,cleanVersion="2.10.5",
+        cleanDir=CLEANNEW:match("^(.-)/media/"),perfVersion="1.2.4",
+        proxVersion="1.0.3",searchVersion="0.1.4-rc.3",
+        activeMods={SuQingSearchEnhancement=true,SuQingUIInteractionFixes=true,
+            Codex_InventoryTransferPerformance_4221=true,NeatUI_Equipment=true,P4HasBeenRead=true},
+        p4Version="3.8.1",p4Dir=P4NEWDIR,source=SEARCH,rendererLine=376,helperLine=393}
+    for key,value in pairs(options or {}) do values[key]=value end
+    return fixture(values)
+end
 test("actual native Core version is accepted",function()
  check(type(DISPLAY_NATIVE_CORE_VERSION)=="string","native Core readback required")
- eq(DISPLAY_NATIVE_CORE_VERSION,"42.21");eq(DISPLAY_NATIVE_CORE_BUILD_VERSION,"42.21.0")
- local x=fixture({game=DISPLAY_NATIVE_CORE_VERSION,build=DISPLAY_NATIVE_CORE_BUILD_VERSION});x:tick();eq(x.D.enabled,true)
- eq(x.D.compatRevision,"deferred-render-chain-3");eq(x.D.gameVersion,DISPLAY_NATIVE_CORE_VERSION);eq(x.D.gameBuild,DISPLAY_NATIVE_CORE_BUILD_VERSION)
+ local x
+ if DISPLAY_NATIVE_CORE_VERSION=="42.22" then
+    eq(DISPLAY_NATIVE_CORE_BUILD_VERSION,"42.22.2")
+    x=newer()
+ else
+    eq(DISPLAY_NATIVE_CORE_VERSION,"42.21");eq(DISPLAY_NATIVE_CORE_BUILD_VERSION,"42.21.0")
+    x=fixture({game=DISPLAY_NATIVE_CORE_VERSION,build=DISPLAY_NATIVE_CORE_BUILD_VERSION})
+ end
+ x:tick();eq(x.D.enabled,true)
+ eq(x.D.compatRevision,"deferred-render-chain-4");eq(x.D.gameVersion,DISPLAY_NATIVE_CORE_VERSION);eq(x.D.gameBuild,DISPLAY_NATIVE_CORE_BUILD_VERSION)
  check(x.logs[#x.logs]:find("display context ready",1,true)~=nil,"installation evidence")
 end)
-test("equivalent explicit build representation is accepted",function()
- local x=fixture({game=DISPLAY_NATIVE_CORE_BUILD_VERSION});x:tick();eq(x.D.enabled,true)
+test("equivalent explicit old short version representation is accepted",function()
+ local x=fixture({game="42.21.0"});x:tick();eq(x.D.enabled,true)
 end)
 test("failed version accessor is reported rather than mislabeled",function()
  local x=fixture({versionError=true})
@@ -256,6 +278,33 @@ for _,spec in ipairs({
  test("unsupported late wrapper is rejected",function()
   spec.clean=true;local x=fixture(spec);x:tick();eq(x.D.enabled,false);eq(x.class.renderdetails,x.prior)
   check(x.logs[#x.logs]:find("renderer=",1,true)~=nil);check(x.logs[#x.logs]:find("line=240",1,true)~=nil)
+ end)
+end
+
+test("new CleanUI selected render entry opens display scope",function()
+ local x=newer({source=CLEANNEW,rendererLine=5678,activeMods={}});x:tick()
+ eq(x.D.enabled,true);eq(x.D.source,"CleanUI-2.10.5")
+end)
+test("new proximity wrapper opens display scope",function()
+ local x=newer({source=PROX,rendererLine=226});x:tick()
+ eq(x.D.enabled,true);eq(x.D.source,"SuQingUIInteractionFixes-1.0.3/CleanUI-2.10.5")
+end)
+test("new Search wrapper preserves results and late Snake compatibility revokes scope",function()
+ local seen={}
+ local x=newer({prior=function(...)seen[#seen+1]=SuQingRefrigeration.Runtime.displayDepth;return ... end})
+ x:tick();eq(x.D.enabled,true);eq(x.D.source,"SuQingSearchEnhancement-0.1.4-rc.3/CleanUI-2.10.5")
+ eq(select("#",x.class.renderdetails("item",nil,"tail")),3);eq(seen[1],1);eq(x.R.displayDepth,0)
+ CleanUI_SnakeUtilsRenderCompatInstalled=true
+ x.class.renderdetails("item");eq(seen[2],0);eq(x.D.enabled,false);eq(x.R.displayDepth,0)
+end)
+for _,spec in ipairs({
+ {build="42.22.1"}, {clean=false}, {cleanVersion="2.10.4"}, {cleanDir="CleanUI/42.19"},
+ {searchVersion="0.1.4-rc.2"}, {proxVersion="1.0.2"}, {perfVersion="1.2.3"},
+ {rendererLine=377}, {helperLine=394}, {source=CLEANNEW,rendererLine=5679},
+ {source=VANILLA}, {cleanDir="C:/unreviewed/CleanUI/42.22"}, {snake=true}, {activeMods={SMP_SnakeUtilsPack=true}}
+}) do
+ test("new game declines unsupported builds and chains",function()
+    local x=newer(spec);x:tick();eq(x.D.enabled,false);eq(x.class.renderdetails,x.prior)
  end)
 end
 return "PASS display context cases="..cases.." checks="..checks

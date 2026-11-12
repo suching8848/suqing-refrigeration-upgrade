@@ -85,22 +85,28 @@ function B.Status()
     if B.calls then return B.calls.status() end
     return B.failure or "Lua backend"
 end
+local function captureApi(api)
+    local ok,calls,message=pcall(function()
+        local captured={}
+        for _,name in ipairs(names) do
+            local f=api[name]
+            if type(f)~="function" then return nil,"missing API method "..name end
+            captured[name]=f
+        end
+        if captured.apiVersion()~=1 then return nil,"unsupported API version" end
+        return captured
+    end)
+    if not ok then return nil,calls end
+    return calls,message
+end
 function B.TryStart(runtime)
     B.AssertUsable()
     if B.attempted then return B.active end
     B.attempted=true
     local api=SuQingNativeColdApi
     if api==nil then return false end
-    local calls={}
-    local ok,message=pcall(function()
-        for _,name in ipairs(names) do
-            local f=api[name]
-            if type(f)~="function" then error("missing API method "..name,0) end
-            calls[name]=f
-        end
-        if calls.apiVersion()~=1 then error("unsupported API version",0) end
-    end)
-    if not ok then warning(tostring(message).."; Lua path retained");return false end
+    local calls,message=captureApi(api)
+    if not calls then warning(tostring(message).."; Lua path retained");return false end
     B.api,B.calls=api,calls
     B.baseVersion,B.priorAge,B.ageWrapper=C.version,runtime.nativeAge,runtime.ageWrapper
     local checked,prepared=pcall(function()
@@ -140,6 +146,8 @@ function B.TryStart(runtime)
 end
 function B.Shutdown()
     local calls=B.calls
+    -- Returning to the menu rebuilds Lua, but the Java backend can outlive it.
+    if not calls and SuQingNativeColdApi~=nil then calls=captureApi(SuQingNativeColdApi) end
     if calls then
         local ok,message=pcall(calls.shutdown)
         local checked,active=pcall(calls.isActive)

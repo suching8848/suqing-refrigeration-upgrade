@@ -2,7 +2,7 @@
 
 [中文](README.md) · [English](README.en.md)
 
-Project Zomboid **Build 42.21 单人候选版 1.0.0-rc.2-perf.8**。Mod ID：`SuQingRefrigerationUpgrade_4221`。
+Project Zomboid **Build 42.21 / 42.22.2 单人候选版 1.0.0-rc.2-perf.8**。Mod ID：`SuQingRefrigerationUpgrade_4221`。
 
 为现有标准可穿戴储物装备安装永久冷藏改造，保留原容量、减重、自重、外观、装备槽位、储液组件和收纳过滤。无需普通容器升级或背包超级升级前置，可与它们共用。不会返鲜。
 
@@ -16,7 +16,9 @@ Project Zomboid **Build 42.21 单人候选版 1.0.0-rc.2-perf.8**。Mod ID：`Su
 
 首次按ZombieBuddy正常提示批准JAR。新增、更换、禁用或移除Java补丁必须完整退出并重启游戏，不能在运行中替换JAR。它只读取得ZB私有 `Loader.g_instrumentation`，不修改游戏JAR或关闭批准机制；精确版本和JAR/食品字节码门禁拒绝未审核组合。接管前先清算旧Lua，确认Java激活后才停止旧循环；激活前缺失或不匹配保留Lua，运行中故障有明确停用/重启边界。详见[后端说明](native-backend/README.md)。
 
-用户单人实测及两次新日志已确认Java接管、旧Lua全扫停止和正常保存退出，用户报告明显改善；本轮没有同负载受控FPS净增百分比或联机验收。**可选Lua显示合并目前精确支持已审核的搜索增强0.1.1；搜索增强0.1.2会安全停用该显示功能。** 这不阻止Java后端接管，不放宽版本门禁来假定新包装器已支持。
+用户单人实测及两次新日志已确认Java接管、旧Lua全扫停止和正常保存退出，用户报告明显改善；本轮没有同负载受控FPS净增百分比或联机验收。
+
+B42.22.2 的 Lua 显示合并适用于工坊 CleanUI 2.10.5 的 42.22 分支及已审核的可选库存包装器（批量转移 1.2.4、融合选区 1.0.3、搜索增强 0.1.4-rc.3）。未知包装、Snake Utils 和实际操作继续即时结算。Java 接管后的食品老化沿用原生处理。
 
 ## perf.7 按显示需求采集快照（2026-11-07）
 
