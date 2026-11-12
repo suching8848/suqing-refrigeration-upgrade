@@ -1,2 +1,2 @@
-中文：新增可选独立Java性能补丁桥接和大量食品性能提示，保留Lua独立运行与既有物品/付费记录。原生模式用原版冷藏/腐坏设置；自定义倍率仅Lua生效。用户单人确认接管与正常保存退出。
-English: optional independent Java backend handover and large-food-load guidance. Keeps standalone Lua and existing items/payments. Native mode uses vanilla factors; custom rate is Lua-only. User SP activation/save/exit confirmed.
+适配 B42.22.2 单人 Lua，保留 B42.21 和 perf.8 接口标识。审查后的 CleanUI 2.10.5 渲染链可合并显示结算；沿用退出重进清理。
+B42.22.2 Lua single-player compatibility with B42.21 and the perf.8 interface retained. Reviewed CleanUI 2.10.5 inventory rendering can coalesce display settlement. Includes the Lua re-entry cleanup.

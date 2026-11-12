@@ -11,7 +11,7 @@ Java模式由原生食品调度接管，停止Lua全食品Tick循环，采用原
 Lua模式默认腐坏20%，可设0–100%；常温降到冷藏约20游戏分钟。标准可穿戴InventoryContainer自动识别，特殊过滤器遵循原许可；不改烧焦、污染、毒素、生熟或吃剩份量。
 
 [h2]兼容与范围[/h2]
-B42.21单人；多人/专服未验证。与普通容器升级、EX及返鲜餐盒可配合，保持来源装备和实际加载顺序。可选Lua显示合并精确审核至搜索增强0.1.1；0.1.2会安全停用该显示功能，Java接管不依赖它。用户已测试原生接管及保存退出并报告改善，没有受控FPS净增比例。
+Lua 主模组支持 B42.21 和 B42.22.2 单人。与普通容器升级、EX 和返鲜餐盒可配合，沿用原装备及加载顺序。B42.22.2 的可选显示合并支持工坊 CleanUI 2.10.5 的 42.22 分支、批量转移 1.2.4、融合选区 1.0.3 和搜索增强 0.1.4-rc.3。其他渲染链使用即时结算。两版离线回归通过，B42.22.2 游戏内待验收。用户已测试原生接管及保存退出并报告改善，没有受控FPS净增比例。
 
 [h1]English[/h1]
 Install permanent refrigeration on standard wearable storage while retaining capacity, weight, appearance, fluids, filters and existing paid records. This mod does not rejuvenate food.
@@ -20,7 +20,7 @@ Install permanent refrigeration on standard wearable storage while retaining cap
 Native mode stops the Lua full-food Tick sweep and uses vanilla FridgeFactor/FoodRotSpeed. Custom RotSpeedPercent is Lua-only; existing items/payments remain.
 
 Crafting requires6 batteries,4 wires,4 electronics scrap and2 small metal sheets. Unequip, empty and drain the target, then use SuQing Refrigeration crafting. Cooling has unlimited runtime; right-click toggles upgraded equipment. Craft removal refunds half the recorded payment without refilling batteries.
-Lua spoilage defaults to20%, configurable0–100%; ambient cooling takes roughly20 game minutes. Native filtering, food state and other storage stats remain. Optional display coalescing is audited for Search Enhancement0.1.1;0.1.2 disables it safely without preventing Java takeover. User SP activation/save/exit and subjective improvement are confirmed; no controlled FPS percentage or multiplayer support is claimed.
+Lua spoilage defaults to20%, configurable0–100%; ambient cooling takes roughly20 game minutes. Native filtering, food state and other storage stats remain. The Lua base supports B42.21 and B42.22.2 single-player. On B42.22.2, optional display coalescing covers the Workshop CleanUI 2.10.5 42.22 branch and reviewed Transfer Performance 1.2.4, Proximity Selection 1.0.3 and Search Enhancement 0.1.4-rc.3 wrappers. Other render paths settle immediately. Both builds passed offline regressions; B42.22.2 gameplay testing is pending. User SP activation/save/exit and subjective improvement are confirmed; no controlled FPS percentage or multiplayer support is claimed.
 
 Mod ID: SuQingRefrigerationUpgrade_4221
 Source: https://github.com/suching8848/suqing-refrigeration-upgrade
