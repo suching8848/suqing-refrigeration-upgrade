@@ -7,7 +7,7 @@
   "workshop_item_id": "3832223788",
   "workshop_url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3832223788",
   "title": "蘇清的冷藏升级模组 | SuQing's Refrigeration Upgrades",
-  "state": "verified_public",
+  "state": "uploaded_verified_public",
   "uploaded": true,
   "upload_acknowledged": true,
   "native_readback_verified": true,
@@ -15,19 +15,32 @@
   "visibility": "public",
   "public": true,
   "target_visibility_value": 0,
-  "content_tree_sha256": "da766de5e723049b56548d469d353745b2e07f3c13e16fd42d889e16894cb678",
-  "content_bytes": 646495,
+  "content_tree_sha256": "33cdd6b6a70af71220116434da55e80b8b9760a10a405fcda7b38a036a1f3026",
+  "content_bytes": 646967,
   "content_file_count": 28,
   "required_workshop_ids": [],
   "actual_workshop_children": [],
   "preview_policy": "file",
   "actual_preview_bytes": 395283,
-  "recorded_at_bjt": "2026-11-12T16:37:34.650425+08:00",
-  "verified_at_bjt": "2026-11-12T16:37:34.650425+08:00",
-  "upload_receipt": "D:\\GameBackups\\ProjectZomboid\\SelfModSync_20261112\\publication-receipts\\refrigeration-upgrade\\upload-20261112-163651-aee5aa98.json",
-  "verification_receipt": "D:\\GameBackups\\ProjectZomboid\\SelfModSync_20261112\\publication-receipts\\refrigeration-upgrade\\verify-20261112-163734-23206dd8.json",
-  "frozen_release": "D:\\GameBackups\\ProjectZomboid\\SelfModSync_20261112\\main-mods\\refrigeration-upgrade\\release.json",
+  "recorded_at_bjt": "2026-11-15T18:26:02.196783+08:00",
+  "verified_at_bjt": "2026-11-15T18:26:02.196783+08:00",
   "identity_policy": "Reuse this Workshop item for future updates; never recreate it because an update or visibility change failed.",
-  "verification_scope": "Native successful content-submit callback plus uncached SDK readback of exact listing text, metadata tree hash, total bytes, tags, preview policy and dependencies. No remote member-by-member download and no additional gameplay test.",
-  "github_repository": "https://github.com/suching8848/suqing-refrigeration-upgrade"
+  "verification_scope": "Native success plus exact text, metadata tree hash, content-byte total, tags and preview presence; not a remote per-file SHA download.",
+  "github_repository": "https://github.com/suching8848/suqing-refrigeration-upgrade",
+  "mod_versions": {
+    "SuQingRefrigerationUpgrade_4221": "1.0.0-rc.2-perf.8"
+  },
+  "tags": [
+    "Build 42",
+    "Items",
+    "Clothing/Armor",
+    "QOL"
+  ],
+  "uploaded_verified_private": false,
+  "previous_publication_summary": {
+    "version": "1.0.0-rc.2-perf.8",
+    "visibility": "public",
+    "content_tree_sha256": "da766de5e723049b56548d469d353745b2e07f3c13e16fd42d889e16894cb678",
+    "verified_at_bjt": "2026-11-12T16:37:34.650425+08:00"
+  }
 }
