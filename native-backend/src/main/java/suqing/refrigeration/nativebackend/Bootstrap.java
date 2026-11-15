@@ -1,18 +1,28 @@
 package suqing.refrigeration.nativebackend;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.*;
 import java.nio.file.*;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.util.*;
 
 /** Canonical system-loader installation state; deliberately inactive until Lua handoff. */
 public final class Bootstrap {
     public static final int API_VERSION=1;
     public static final String MOD_ID="SuQingRefrigerationNative_4221";
-    public static final String VERSION="0.1.0-rc.1";
+    public static final String VERSION="0.1.0-rc.2";
+    private record ReviewedBuild(String version, String foodSha256, String stockJarSha256) { }
+    private static final Map<String,ReviewedBuild> REVIEWED_BUILDS=Map.of(
+            "42.21.0",new ReviewedBuild("42.21",
+                    "14a5b02878a5608e3a28d3e91110961b3576694badf127dc7fe2749b8393d8b1",null),
+            "42.22.2",new ReviewedBuild("42.22",
+                    "72c432d1730ffc84bb96711b12da6864f845ea898a761acd70caa5a61f0f96c0",
+                    "3c4a7c5f149d784758c6fb5f8fa85f3a21d572e38bc081400e89035f8120d287"));
     private static volatile String state="uninstalled",failure;
-    private static String candidatePath,candidateHash,zbPath;
+    private static String candidatePath,candidateHash,zbPath,gameBuild;
     private static FoodTransformer transformer;
     private static Instrumentation instrumentation;
     private static Class<?> runtime;
@@ -46,7 +56,7 @@ public final class Bootstrap {
             ClassLoader system=ClassLoader.getSystemClassLoader();
             verifyCanonical(FoodTransformer.class,jar);
             verifyCanonical(AgentSupport.class,jar);
-            verifyGameBuild(system);
+            ReviewedBuild reviewedBuild=verifyGameBuild(system);
             verifyHooks(system,jar);
             runtime=Class.forName("suqing.refrigeration.nativebackend.NativeRuntime",true,system);
             verifyCanonical(runtime,jar);
@@ -68,8 +78,9 @@ public final class Bootstrap {
                 if(input==null) throw new IllegalStateException("Food class resource unavailable");
                 reviewed=input.readAllBytes();
             }
-            if(!FoodTransformer.EXPECTED_FOOD_SHA256.equals(FoodTransformer.sha256(reviewed)))
-                throw new IllegalStateException("Unsupported Food resource sha256="+FoodTransformer.sha256(reviewed));
+            String foodHash=FoodTransformer.sha256(reviewed);
+            if(!reviewedBuild.foodSha256().equals(foodHash))
+                throw new IllegalStateException("Unsupported Food resource build="+gameBuild+" sha256="+foodHash);
             // Validate the entire rewrite before registering any transformer.
             FoodTransformer.rewrite(reviewed);
             transformer=new FoodTransformer(Bootstrap::transformFailed);
@@ -90,7 +101,7 @@ public final class Bootstrap {
                 throw new IllegalStateException("Food rewrite did not complete exactly once: "+transformer.lastFailure());
             if(!jarHash.equals(AgentSupport.sha256(Files.readAllBytes(jar)))) throw new IllegalStateException("Candidate changed during installation");
             state="installed";failure=null;
-            System.out.println("[SuQingRefrigerationNative] installed inactive; api="+API_VERSION+" game=42.21.0 ZB="+AgentSupport.ZB_VERSION+" privateABI=g_instrumentation candidate="+candidateHash+" hooks="+transformer.lastCounts());
+            System.out.println("[SuQingRefrigerationNative] installed inactive; api="+API_VERSION+" game="+gameBuild+" ZB="+AgentSupport.ZB_VERSION+" privateABI=g_instrumentation candidate="+candidateHash+" hooks="+transformer.lastCounts());
             return true;
         } catch(Throwable error) {
             transformFailed(describe(error));
@@ -99,13 +110,47 @@ public final class Bootstrap {
         }
     }
 
-    private static void verifyGameBuild(ClassLoader system) throws Exception {
+    private static ReviewedBuild verifyGameBuild(ClassLoader system) throws Exception {
         Class<?> core=Class.forName("zombie.core.Core",true,system);
         Object instance=core.getMethod("getInstance").invoke(null);
         String version=String.valueOf(core.getMethod("getVersionNumber").invoke(instance));
         String build=String.valueOf(core.getMethod("getGameAndBuildVersion").invoke(instance));
-        if(!(version.equals("42.21")||version.equals("42.21.0"))||!build.equals("42.21.0"))
+        ReviewedBuild reviewed=reviewedBuild(version,build);
+        if(reviewed.stockJarSha256()!=null)
+            verifyStockSources(system,core,reviewed.stockJarSha256());
+        gameBuild=build;
+        return reviewed;
+    }
+
+    private static ReviewedBuild reviewedBuild(String version,String build) {
+        ReviewedBuild reviewed=REVIEWED_BUILDS.get(build);
+        if(reviewed==null||!(version.equals(reviewed.version())||version.equals(build)))
             throw new IllegalStateException("Unsupported game version="+version+" build="+build);
+        return reviewed;
+    }
+
+    private static void verifyStockSources(ClassLoader system,Class<?> core,String expectedHash) throws Exception {
+        Path stock=AgentSupport.codeSourceJar(core);
+        MessageDigest digest=MessageDigest.getInstance("SHA-256");
+        try(DigestInputStream input=new DigestInputStream(Files.newInputStream(stock),digest)) {
+            input.transferTo(OutputStream.nullOutputStream());
+        }
+        String hash=HexFormat.of().formatHex(digest.digest());
+        if(!expectedHash.equals(hash))
+            throw new IllegalStateException("Unsupported stock game JAR sha256="+hash);
+        // A matching Food resource alone cannot establish that its dependencies
+        // came from the reviewed stock JAR rather than a classpath overlay.
+        for(String name:List.of("zombie.inventory.types.Food","zombie.inventory.InventoryItem",
+                "zombie.inventory.ItemContainer","zombie.inventory.types.InventoryContainer",
+                "zombie.iso.IsoGridSquare","zombie.GameTime","zombie.SandboxOptions",
+                "zombie.SandboxOptions$EnumSandboxOption","zombie.config.EnumConfigOption",
+                "zombie.Lua.LuaManager","zombie.scripting.objects.ItemBodyLocation",
+                "se.krka.kahlua.vm.KahluaTable","se.krka.kahlua.j2se.J2SEPlatform",
+                "se.krka.kahlua.j2se.KahluaTableImpl")) {
+            Class<?> dependency=Class.forName(name,false,system);
+            if(dependency.getClassLoader()!=system||!stock.equals(AgentSupport.codeSourceJar(dependency)))
+                throw new IllegalStateException("Non-stock game dependency: "+name);
+        }
     }
     private static void verifyCanonical(Class<?> type,Path candidate) throws Exception {
         if(type.getClassLoader()!=ClassLoader.getSystemClassLoader()
@@ -148,7 +193,8 @@ public final class Bootstrap {
     public static String lastFailure(){return failure;}
     public static String status(){
         return "{\"api\":"+API_VERSION+",\"modId\":"+AgentSupport.json(MOD_ID)+",\"version\":"+AgentSupport.json(VERSION)
-            +",\"installed\":"+isInstalled()+",\"state\":"+AgentSupport.json(state)+",\"failure\":"+AgentSupport.json(failure)
+            +",\"gameBuild\":"+AgentSupport.json(gameBuild)+",\"installed\":"+isInstalled()
+            +",\"state\":"+AgentSupport.json(state)+",\"failure\":"+AgentSupport.json(failure)
             +",\"candidatePath\":"+AgentSupport.json(candidatePath)+",\"candidateSha256\":"+AgentSupport.json(candidateHash)
             +",\"zombieBuddyPath\":"+AgentSupport.json(zbPath)+",\"zombieBuddyVersion\":"+AgentSupport.json(AgentSupport.ZB_VERSION)
             +",\"zombieBuddySha256\":"+AgentSupport.json(AgentSupport.ZB_SHA256)+",\"privateAbi\":\"Loader.g_instrumentation\""

@@ -22,8 +22,11 @@ def main():
     for name in ['README.md','README.en.md','CHANGELOG.md','native-backend/README.md']:
         sources[name]=ROOT/name
     content={name:f.read_bytes()for name,f in sorted(sources.items())}
+    def mod_version(name):
+        metadata=content[f'mods/{name}/42/mod.info'].decode('utf-8-sig').splitlines()
+        return next(line.split('=',1)[1] for line in metadata if line.startswith('modversion='))
     manifest={'created_utc':datetime.now(timezone.utc).isoformat(),'installed':False,'enabled':False,'published':False,
-        'status':'SOURCE_REVIEW_CANDIDATE_OFFLINE_ONLY','main_version':'1.0.0-rc.2-perf.8','native_version':'0.1.0-rc.1',
+        'status':'SOURCE_REVIEW_CANDIDATE_OFFLINE_ONLY','main_version':mod_version('SuQingRefrigerationUpgrade_4221'),'native_version':mod_version('SuQingRefrigerationNative_4221'),
         'sources':{name:str(sources[name])for name in content},'sha256':{name:sha(data)for name,data in content.items()}}
     content['CANDIDATE-MANIFEST.json']=(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
     with out.open('xb')as stream:

@@ -11,7 +11,6 @@ import net.bytebuddy.jar.asm.*;
 public final class FoodTransformer implements ClassFileTransformer {
     public static final String FOOD = "zombie/inventory/types/Food";
     public static final String HOOKS = "suqing/refrigeration/nativebackend/NativeHooks";
-    public static final String EXPECTED_FOOD_SHA256 = "14a5b02878a5608e3a28d3e91110961b3576694badf127dc7fe2749b8393d8b1";
     public static final int EXPECTED_MAJOR = 69;
     private static final String CONTAINER = "zombie/inventory/ItemContainer";
     private static final String ITEM = "zombie/inventory/InventoryItem";
@@ -22,7 +21,7 @@ public final class FoodTransformer implements ClassFileTransformer {
         "finishupdate()Z", "isFreezing()Z", "isThawing()Z", "isInFridge(L"+CONTAINER+";)Z",
         "save(Ljava/nio/ByteBuffer;Z)V");
 
-    // Captured from the current 42.21.0 method instructions. Constant-pool order,
+    // Identical in reviewed 42.21.0 and 42.22.2. Constant-pool order,
     // debug information and StackMap encoding are deliberately not hashed.
     private static final Map<String,String> EXPECTED = Map.ofEntries(
         Map.entry("update()V", "e8e1c921e082495059e3d4dae3379b52d1e89e4bda54fc4948abda66e5314357"),

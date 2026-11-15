@@ -1,8 +1,8 @@
 # 可选原生冷藏接管 / Optional native refrigeration backend
 
-发布候选：`SuQingRefrigerationNative_4221` **0.1.0-rc.1**，配套主模组 **1.0.0-rc.2-perf.8**。已完成源码、离线原生/Kahlua验证和用户单人激活、正常保存退出测试；用户报告明显改善。当前按用户授权准备独立公开工坊发布，没有同负载受控FPS百分比、长时或联机验收。主模组仍可独立运行Lua。
+发布候选：`SuQingRefrigerationNative_4221` **0.1.0-rc.2**，配套主模组 **1.0.0-rc.2-perf.8**。已完成源码、离线原生/Kahlua验证和用户单人激活、正常保存退出测试；用户报告明显改善。当前按用户授权准备独立公开工坊发布，没有同负载受控FPS百分比、长时或联机验收。主模组仍可独立运行Lua。
 
-Release candidate: version0.1.0-rc.1 with baseperf.8. Source/offline and user SP activation/save/exit checks passed, with a subjective improvement. Prepared for an independently authorized public Workshop release; no controlled FPS percentage, long-term or multiplayer acceptance is claimed. The base remains independently usable in Lua mode.
+Release candidate: version0.1.0-rc.2 with baseperf.8. Source/offline and user SP activation/save/exit checks passed, with a subjective improvement. Prepared for an independently authorized public Workshop release; no controlled FPS percentage, long-term or multiplayer acceptance is claimed. The base remains independently usable in Lua mode.
 
 Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3834960443
 
@@ -12,7 +12,7 @@ Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3834960443
 - `mod.info` 使用 `require=SuQingRefrigerationUpgrade_4221,ZombieBuddy`、`zbVersionMin=2.3.4` 与 `zbVersionMax=2.3.4`。当前实际ZB解析器包含上下限检查；其unknown开发版本有特殊放行，因此元数据之外仍有独立精确版本、JAR SHA和目标Food字节码门禁。
 - 沿用主模组已有付费改造、装备开关、ItemID和保存schema，不新增物品、配方或美术；可选补丁不附封面、poster或icon，不自动启用。
 
-- **Project Zomboid B42.21.0 single-player only**, paired with **ZombieBuddy2.3.4**. Multiplayer, servers and other game/loader versions are outside this declaration.
+- **Project Zomboid B42.21.0 and stock B42.22.2 single-player**, paired with **ZombieBuddy2.3.4**. Multiplayer, servers and other game/loader versions are outside this declaration.
 - `mod.info` requires the base and ZombieBuddy, with both ZB bounds set to2.3.4. The installed ZB parser checks both bounds but specially allows its unknown development version, so bootstrap independently verifies the exact version, JAR SHA and target Food bytecode.
 - Existing paid upgrades, switches, ItemIDs and save schema remain. No items, recipes or artwork are added; the optional companion has no cover/poster/icon and is never enabled automatically.
 

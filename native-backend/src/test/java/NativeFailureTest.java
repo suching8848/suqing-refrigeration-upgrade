@@ -1,4 +1,6 @@
 import java.lang.instrument.ClassFileTransformer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.ProtectionDomain;
 import net.bytebuddy.jar.asm.ClassReader;
 import net.bytebuddy.jar.asm.ClassWriter;
@@ -33,7 +35,24 @@ public final class NativeFailureTest {
     }
     public static void main(String[]args)throws Exception {
         String mode=args[0];
-        if(mode.equals("missing-handle")){
+        if(mode.equals("unknown-build")){
+            Method profile=Bootstrap.class.getDeclaredMethod("reviewedBuild",String.class,String.class);
+            profile.setAccessible(true);
+            for(String[] pair:new String[][]{{"42.21","42.21.0"},{"42.21.0","42.21.0"},{"42.22","42.22.2"},{"42.22.2","42.22.2"}})
+                check(profile.invoke(null,(Object[])pair)!=null,"reviewed build and exact version form accepted");
+            for(String[] pair:new String[][]{{"42.22","42.22.1"},{"42.22","42.22.3"},{"42.22.2 beta","42.22.2"},{"42.21","42.22.2"}}){
+                boolean rejected=false;
+                try{profile.invoke(null,(Object[])pair);}
+                catch(InvocationTargetException e){rejected=e.getCause() instanceof IllegalStateException;}
+                check(rejected,"unreviewed or mixed build rejected");
+            }
+        } else if(mode.equals("stock-jar")||mode.equals("mixed-origin")){
+            check(!SuQingNativeColdApi.bootstrap(SuQingNativeColdApi.BASE_VERSION),"unsupported provenance refuses takeover");
+            check(!SuQingNativeColdApi.isReady()&&!SuQingNativeColdApi.isActive(),"unsupported provenance remains inactive");
+            String reason=mode.equals("stock-jar")?"Unsupported stock game JAR":"Non-stock game dependency";
+            check(Bootstrap.status().contains(reason),"specific provenance refusal is retained: "+Bootstrap.status());
+            check(Bootstrap.status().contains("\"transformApplications\":0"),"refusal happens before Food transformation");
+        } else if(mode.equals("missing-handle")){
             check(!SuQingNativeColdApi.bootstrap(SuQingNativeColdApi.BASE_VERSION),"missing ZB instrumentation refuses takeover");
             check(!SuQingNativeColdApi.isReady()&&!SuQingNativeColdApi.isActive(),"missing handle remains inactive");
             check(SuQingNativeColdApi.status().contains("instrumentation is unavailable"),"reason is inspectable");

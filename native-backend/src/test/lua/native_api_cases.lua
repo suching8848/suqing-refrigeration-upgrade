@@ -35,6 +35,14 @@ SandboxVars.SuQingRefrigeration.Enabled=false;NativeApiEmit("OnTickEvenPaused")
 local h=C.Global().history;near(h[#h].rate,1,"master-off history becomes ordinary rate")
 SandboxVars.SuQingRefrigeration.Enabled=true;R.Tick();near(h[#h].rate,api.fridgeFactor())
 check(R.FlushAll()==true,"real void flushKnown is success")
+-- The engine rebuilds Lua and re-exposes the API while the Java runtime persists.
+B.calls,B.active,B.attempted=nil,false,false
+R.ready=false
+NativeApiEmit("OnMainMenuEnter")
+check(not R.ready and not B.IsActive() and not api.isActive() and not api.isReady(),
+    "actual native shutdown from the rebuilt Lua environment")
+NativeApiEmit("OnGameStart")
+check(R.ready and B.IsActive() and api.isActive(),"actual native backend takes over on re-entry")
 NativeApiEmit("OnMainMenuEnter")
 check(not R.ready and not B.IsActive() and not api.isActive(),"actual native shutdown via Lua menu callback")
 local summary="NATIVE_LUA_API assertions="..assertions.." PASS"

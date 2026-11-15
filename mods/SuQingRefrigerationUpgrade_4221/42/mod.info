@@ -8,4 +8,4 @@ versionMax=42.22
 icon=icon.png
 poster=poster.png
 loadModAfter=SuQingContainerUpgrade_4221,ExSuQingBackpackSuperUpgrade_4221,CleanUI,Neat_Crafting
-description=随身装备冷藏改造，适用 B42.21 和 B42.22.2 单人 Lua。可选 Java 性能补丁另行分发。 / Wearable refrigeration for B42.21 and B42.22.2 single-player Lua. The optional Java companion is distributed separately.
+description=B42.21 与 B42.22 单人 Lua 冷藏候选。独立装备冷藏改造，保留原容量、减重、自重和已有付款记录，不返鲜。Lua模式大量食品CPU开销较大，建议搭配独立Java性能补丁SuQingRefrigerationNative_4221；主模组仍可单独使用。Java候选0.1.0-rc.2需ZombieBuddy2.3.4，单人适配B42.21.0和原版B42.22.2，采用原版冷藏与腐坏规则。 / B42.21 and B42.22 single-player Lua candidate. Wearable refrigeration without changing capacity, weight or payment records; no rejuvenation. Lua mode can be CPU-heavy with many foods: the separate Java companion SuQingRefrigerationNative_4221 is recommended. The base remains standalone. Java candidate 0.1.0-rc.2 requires ZombieBuddy 2.3.4 and uses vanilla refrigeration and spoilage rules on B42.21.0 and stock B42.22.2 in single-player.

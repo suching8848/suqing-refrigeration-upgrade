@@ -1,5 +1,7 @@
 # 更新记录 / Changelog
 
+2026-11-15 · Native 0.1.0-rc.2 · B42.22.2 / ZombieBuddy 2.3.4 离线交接通过，本机正式档日志有原生接管回执。 / Offline handover passed and game logs recorded activation on B42.22.2 with ZombieBuddy 2.3.4.
+
 ## B42.22.2 Lua 单人适配 / B42.22.2 single-player Lua compatibility
 
 支持 B42.21 和 B42.22.2 单人 Lua 模式，沿用 perf.8 兼容标识、随身装备、冷藏开关和付款记录。B42.22.2 的 Lua 显示合并适用于工坊 CleanUI 2.10.5 的 42.22 分支及已审核的可选库存包装器（批量转移 1.2.4、融合选区 1.0.3、搜索增强 0.1.4-rc.3）。未知包装、Snake Utils 和实际操作继续即时结算。Java 接管后的食品老化沿用原生处理。两版离线回归通过，B42.22.2 游戏内验收待完成。

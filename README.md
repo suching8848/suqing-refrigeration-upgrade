@@ -10,7 +10,7 @@ Project Zomboid **Build 42.21 / 42.22.2 单人候选版 1.0.0-rc.2-perf.8**。Mo
 
 **Lua 模式在大量冷藏食品下可能有较高的 CPU 开销，即使关闭背包也可能影响帧率。大容量随身容器或数百件冷藏食品，建议搭配[蘇清的冷藏性能补丁](https://steamcommunity.com/sharedfiles/filedetails/?id=3834960443)。** 普通工具、武器和材料不做逐件冷藏结算；发现扫描仍会遍历物品和嵌套容器，主要持续负载来自被追踪的 `Food` 类物品。
 
-本主模组可以独立运行，不强制安装 Java。性能补丁是单独的工坊项目，Mod ID `SuQingRefrigerationNative_4221`，版本0.1.0-rc.1；需要本主模组1.0.0-rc.2-perf.8及[ZombieBuddy 2.3.4](https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853)，仅审核B42.21.0单人。顺序：ZombieBuddy → 冷藏升级 → 返鲜餐盒（若使用）→ 性能补丁。
+本主模组可以独立运行，不强制安装 Java。性能补丁是单独的工坊项目，Mod ID `SuQingRefrigerationNative_4221`，版本 0.1.0-rc.2；需要本主模组1.0.0-rc.2-perf.8及[ZombieBuddy 2.3.4](https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853)，适配 B42.21.0 与原版 B42.22.2 单人。顺序：ZombieBuddy → 冷藏升级 → 返鲜餐盒（若使用）→ 性能补丁。
 
 补丁由原生食品调度接管年龄、冷藏温度和冻融，停止Lua逐Tick全食品循环。总开关、已有物品、付款记录、费用和存档schema保留。Java模式采用原版 `FridgeFactor` / `FoodRotSpeed`，自定义 `RotSpeedPercent` 只在Lua模式生效。Lua模式保留原有约20游戏分钟降温和自定义年龄封顶；两种后端的温度过渡不保证完全相同。
 
