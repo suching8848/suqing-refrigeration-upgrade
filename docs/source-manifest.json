@@ -1,11 +1,11 @@
 {
   "mod_id": "SuQingRefrigerationUpgrade_4221",
   "version": "1.0.0-rc.2-perf.8",
-  "purpose": "Exact B42.21 and B42.22.2 single-player Lua source snapshot. Offline checks passed; B42.22.2 gameplay testing is pending.",
+  "purpose": "B42.21 and B42.22.2 single-player Lua source snapshot. The CleanUI 2.10.7 render chain passed offline checks and initialized in the B42.22.2 single-player log.",
   "sha256": {
     "42/icon.png": "242e5bd98524581a142d3b29e03b191009de9acbcc909ba59f1f606ec5649606",
     "42/media/lua/client/SuQingRefrigeration_Crafting.lua": "dec3a3816842f74bb60f65fbe74fec1dcc9c85673428cb3ad5145e1d56ad49aa",
-    "42/media/lua/client/SuQingRefrigeration_Display.lua": "f15c32eb2192dc2d7990ea161ab61e7798f3b5612eb7a33cb6d6d2a1db504925",
+    "42/media/lua/client/SuQingRefrigeration_Display.lua": "a4f214df28c2e707eb19297488dea0d3cadedf27266fec6dd0d22f0149f8f960",
     "42/media/lua/client/SuQingRefrigeration_Native.lua": "b7e8a022c826c384d83f680e84cb28a7167ff8a68963592b998f3223df3c57d6",
     "42/media/lua/client/SuQingRefrigeration_Runtime.lua": "8f0cfe7e638fac01485879ca9f7fecedda6f13ec4dbf467a51eb747e2cb63af7",
     "42/media/lua/client/SuQingRefrigeration_UI.lua": "551c7572fc7313923a96317c8b8ae91743779a9639c746e0be493f14c729d3b8",
@@ -31,5 +31,6 @@
     "42/poster.png": "867b3f78a6ee7c933a9afcfd0baacc96b798ba5045abb3fc37721cd35778bc00",
     "common/README.txt": "2738157b31892b6a68d9d826a79d7ba1553bf275352714e9b381478062c31114",
     "README.txt": "d66a2a833d0213082a0153af6442ea0dd34bb7e1b1039d30d9903172e790d1ec"
-  }
+  },
+  "display_compatibility_revision": "deferred-render-chain-6"
 }

@@ -7,7 +7,7 @@ C.Display=C.Display or {}
 local D=C.Display
 if D.loaded then return D end
 D.loaded=true
-D.compatRevision="deferred-render-chain-4"
+D.compatRevision="deferred-render-chain-6"
 D.enabled=false
 D.attempted=false
 D.normalTicks=0
@@ -62,6 +62,15 @@ end
 -- getFilenameOfClosure is the game's supported closure-source API; debug.getinfo
 -- is not required. These paths and wrapper versions are the locally audited
 -- render-only chain, not a blanket allowance for arbitrary UI wrappers.
+local reviewedCleanUI4222 = {
+    ["2.10.5"]={performance="1.2.4", proximity="1.0.3", search="0.1.4-rc.3",
+        performanceLine=445, proximityLine=226, searchLine=376, orderingLine=393},
+    ["2.10.6"]={performance="1.2.5", proximity="1.0.4", search="0.1.4-rc.4",
+        performanceLine=449, proximityLine=230, searchLine=376, orderingLine=398},
+    ["2.10.7"]={performance="1.2.6", proximity="1.0.5", search="0.1.4-rc.5",
+        performanceLine=456, proximityLine=238, searchLine=376, orderingLine=401},
+}
+
 local function reviewedRenderer(fn)
     if type(fn)~="function" or type(getFilenameOfClosure)~="function"
         or type(getActivatedMods)~="function" or type(getCore)~="function" then
@@ -88,16 +97,25 @@ local function reviewedRenderer(fn)
         return mods:contains("CleanUI") or mods:contains("\\CleanUI")
     end)
     if not ok then return nil,"active UI metadata unavailable" end
-    local cleanVersion=newer and "2.10.5" or "2.10.4"
-    local cleanBranch=newer and "42.22" or "42.19"
-    local performanceVersion=newer and "1.2.4" or "1.2.2"
-    local proximityVersion=newer and "1.0.3" or "1.0.1"
-    local searchVersion=newer and "0.1.4-rc.3" or "0.1.1"
+    local cleanVersion=clean and version("CleanUI") or nil
+    local chain=newer and reviewedCleanUI4222[cleanVersion] or nil
     if newer and not clean then return nil,"B42.22.2 renderer outside reviewed CleanUI chain" end
-    if clean and version("CleanUI")~=cleanVersion then return nil,"unsupported CleanUI version" end
+    if clean and ((newer and not chain) or (not newer and cleanVersion~="2.10.4")) then
+        return nil,"unsupported CleanUI version"
+    end
+    local hasLegacyOverlay=newer and cleanVersion=="2.10.6"
+    local hasReadingCallback=newer and cleanVersion=="2.10.7"
+    local cleanBranch=newer and "42.22" or "42.19"
+    local performanceVersion=chain and chain.performance or "1.2.2"
+    local proximityVersion=chain and chain.proximity or "1.0.1"
+    local searchVersion=chain and chain.search or "0.1.1"
     if newer and (CleanUI_SnakeUtilsRenderCompatInstalled
-        or mods:contains("SMP_SnakeUtilsPack") or mods:contains("\SMP_SnakeUtilsPack")) then
+        or mods:contains("SMP_SnakeUtilsPack") or mods:contains("\\SMP_SnakeUtilsPack")) then
         return nil,"unsupported CleanUI Snake Utils renderer"
+    end
+    if hasReadingCallback and (mods:contains("EURY_CONTAINERS") or mods:contains("\\EURY_CONTAINERS")
+        or mods:contains("ProjectExile") or mods:contains("\\ProjectExile")) then
+        return nil,"unreviewed CleanUI row renderer interoperability"
     end
     -- A reviewed outer wrapper can capture inner wrappers. Check each
     -- active participant's selected version and branch before opening the context.
@@ -132,6 +150,16 @@ local function reviewedRenderer(fn)
         p4Version,p4Dir,p4Reason=reviewedP4()
         if not p4Version then return nil,p4Reason end
         D.p4Version=p4Version;D.p4VersionDir=p4Dir
+        if hasReadingCallback then
+            local draw=rawget(_G,"CleanUI_HasBeenReadDrawVisibleMarks")
+            local drawOk,drawSource=pcall(getFilenameOfClosure,draw)
+            local drawLineOk,drawLine=pcall(getFirstLineOfClosure,draw)
+            if type(draw)~="function" or not drawOk or not drawLineOk or drawLine~=212
+                or normalized(drawSource)~=reviewedDirs.CleanUI.."/media/lua/client/patch/cleanui_hasbeenreadcompat.lua" then
+                return nil,"unreviewed CleanUI reading callback"
+            end
+            D.readingCallback=draw
+        end
     end
     local source
     ok,source=pcall(getFilenameOfClosure,fn)
@@ -141,8 +169,8 @@ local function reviewedRenderer(fn)
     -- These local wrappers participate in presentation only. Verify the
     -- selected source and the audited first executable line on B42.22.2.
     for _,entry in ipairs({
-        {"SuQingUIInteractionFixes",proximityVersion,"suqing_proximityselectionfix.lua",226},
-        {"SuQingSearchEnhancement",searchVersion,"suqingsearch/runtime.lua",376}})do
+        {"SuQingUIInteractionFixes",proximityVersion,"suqing_proximityselectionfix.lua",chain and chain.proximityLine},
+        {"SuQingSearchEnhancement",searchVersion,"suqingsearch/runtime.lua",chain and chain.searchLine}})do
         local infoOk,dir=pcall(function()
             local info=getModInfoByID(entry[1]) or getModInfoByID("\\"..entry[1])
             return info and info:getVersionDir() or nil
@@ -168,7 +196,7 @@ local function reviewedRenderer(fn)
                 local helperOk,helperSource=pcall(getFilenameOfClosure,helper)
                 local helperLineOk,helperLine=pcall(getFirstLineOfClosure,helper)
                 if not helperOk or normalized(helperSource)~=dir.."/media/lua/client/suqingsearch/ordering.lua"
-                    or (newer and (not helperLineOk or helperLine~=393)) then
+                    or (newer and (not helperLineOk or helperLine~=chain.orderingLine)) then
                     return nil,"unreviewed search ordering helper"
                 end
                 D.orderingHelper=helper
@@ -187,11 +215,23 @@ local function reviewedRenderer(fn)
         and tonumber(D.rendererLine)==5678)) then
         return "CleanUI-"..cleanVersion
     end
+    -- CleanUI's own reading-mark overlay is a pure display wrapper and can
+    -- be the outermost renderer when the optional local patches are absent.
+    if hasLegacyOverlay and p4Active and source==cleanDir.."/media/lua/client/patch/cleanui_hasbeenreadcompat.lua"
+        and tonumber(D.rendererLine)==283 and rawget(ISInventoryPane,"_cleanUIHasBeenReadWrapper")==fn then
+        local original=rawget(ISInventoryPane,"_cleanUIOwnRenderdetails")
+        local originalOk,originalSource=pcall(getFilenameOfClosure,original)
+        local lineOk,line=pcall(getFirstLineOfClosure,original)
+        if originalOk and normalized(originalSource)==cleanDir.."/"..base and lineOk and line==5678 then
+            return "CleanUI-"..cleanVersion.."/HasBeenRead"
+        end
+        return nil,"unreviewed underlying CleanUI renderer"
+    end
     if ends(source,"/inventorytransferperformance_4221_local/42/media/lua/client/codex_inventorytransferperformance.lua") then
         local m=CodexInventoryTransferPerformance
         local perfDir=reviewedDirs.Codex_InventoryTransferPerformance_4221
         if type(m)=="table" and m.installed==true and m.version==performanceVersion and clean
-            and (not newer or (perfDir and tonumber(D.rendererLine)==445
+            and (not newer or (perfDir and tonumber(D.rendererLine)==chain.performanceLine
                 and source==perfDir.."/media/lua/client/codex_inventorytransferperformance.lua")) then
             return "InventoryTransferPerformance-"..performanceVersion..cleanLabel
         end
@@ -223,6 +263,9 @@ function D.Check()
     if D.gameBuild=="42.22.2" and CleanUI_SnakeUtilsRenderCompatInstalled then
         return stop("CleanUI Snake Utils renderer appeared after installation")
     end
+    if D.readingCallback and rawget(_G,"CleanUI_HasBeenReadDrawVisibleMarks")~=D.readingCallback then
+        return stop("CleanUI reading callback was replaced after installation")
+    end
     if D.orderingHelper and (type(SuQingSearch)~="table" or type(SuQingSearch.Ordering)~="table"
         or SuQingSearch.Ordering.render~=D.orderingHelper) then
         return stop("search ordering helper was replaced after installation")
@@ -252,6 +295,11 @@ function D.Install()
         return unpack(result,2,result.n)
     end
     class.renderdetails=D.wrapper
+    -- Preserve CleanUI's overlay registration so a recheck of the same pane
+    -- retains the renderer chain that already delegates to that overlay.
+    if rawget(class,"_cleanUIHasBeenReadWrapper")==prior then
+        class._cleanUIHasBeenReadWrapper=D.wrapper
+    end
     D.enabled=true
     print("[SuQingRefrigeration] display context ready; compat="..D.compatRevision.."; game="..D.gameVersion.."; build="..D.gameBuild.."; source="..supported.."; renderer="..D.rendererSource.."; line="..D.rendererLine.."; mod="..tostring(C.version).."; P4="..tostring(D.p4Version or "inactive").."; P4dir="..tostring(D.p4VersionDir or ""))
     return true,supported

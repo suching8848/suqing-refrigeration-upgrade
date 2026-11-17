@@ -7,6 +7,7 @@ local function test(name,fn)cases=cases+1;fn()end
 local VANILLA="D:/steam/steamapps/common/ProjectZomboid/media/lua/client/ISUI/ISInventoryPane.lua"
 local CLEAN="D:/steam/steamapps/workshop/content/108600/3437629766/mods/CleanUI/42.19/media/lua/client/ISUI/ISInventoryPane.lua"
 local CLEANNEW=CLEAN:gsub("/42.19/","/42.22/")
+local HBR=CLEANNEW:gsub("/ISUI/ISInventoryPane.lua","/Patch/CleanUI_HasBeenReadCompat.lua")
 local PERF="C:/Users/test/Zomboid/mods/InventoryTransferPerformance_4221_Local/42/media/lua/client/Codex_InventoryTransferPerformance.lua"
 local PINYIN="C:/Users/test/Zomboid/mods/Pinyin_UI_4221_LocalCompat/42/media/lua/client/PinyinSafeCompat.lua"
 local P4="D:/steam/steamapps/workshop/content/108600/2544353492/mods/P4HasBeenRead/42/media/lua/client/P4HasBeenRead.lua"
@@ -43,6 +44,7 @@ local function fixture(options)
                 if id=="NeatUI_Equipment" then return o.neatDir or "NeatUI_Equipment/42.20" end
                 if id=="SuQingUIInteractionFixes" then return o.proxDir or PROXDIR end
                 if id=="SuQingSearchEnhancement" then return o.searchDir or SEARCHDIR end
+                if id=="Codex_InventoryTransferPerformance_4221" then return PERF:match("^(.-)/media/") end
                 return "unused/42"
             end
         end
@@ -60,10 +62,24 @@ local function fixture(options)
     lines[SuQingSearch.Ordering.render]=o.helperLine
     local C={Runtime={ready=o.ready~=false},SP=function()return o.multiplayer~=true end}
     SuQingRefrigeration=C
+    CleanUI_HasBeenReadDrawVisibleMarks=nil
+    if o.readingCallback then
+        local draw=function()end
+        CleanUI_HasBeenReadDrawVisibleMarks=draw
+        sources[draw]=o.readingSource or HBR
+        lines[draw]=o.readingLine or 212
+    end
     local context={C=C,R=C.Runtime,callbacks=callbacks,sources=sources,logs=logs}
     local prior=o.prior or function(...)return ... end
     ISInventoryPane={renderdetails=prior};sources[prior]=o.source or VANILLA
     lines[prior]=o.rendererLine
+    if o.overlayMarker then ISInventoryPane._cleanUIHasBeenReadWrapper=prior end
+    if o.cleanOriginal then
+        local original=function()end
+        ISInventoryPane._cleanUIOwnRenderdetails=original
+        sources[original]=o.cleanOriginal
+        lines[original]=o.cleanOriginalLine or 5678
+    end
     context.prior=prior;context.class=ISInventoryPane
     local chunk=assert(loadstring(DISPLAY_MODULE_SOURCE,DISPLAY_MODULE_PATH))
     context.D=chunk()
@@ -78,13 +94,13 @@ local function fixture(options)
     return context
 end
 
-local function newer(options)
-    local values={game="42.22",build="42.22.2",clean=true,cleanVersion="2.10.5",
-        cleanDir=CLEANNEW:match("^(.-)/media/"),perfVersion="1.2.4",
-        proxVersion="1.0.3",searchVersion="0.1.4-rc.3",
+local function newer(options,reviewOverlay)
+    local values={game="42.22",build="42.22.2",clean=true,cleanVersion=reviewOverlay and "2.10.6" or "2.10.5",
+        cleanDir=CLEANNEW:match("^(.-)/media/"),perfVersion=reviewOverlay and "1.2.5" or "1.2.4",
+        proxVersion=reviewOverlay and "1.0.4" or "1.0.3",searchVersion=reviewOverlay and "0.1.4-rc.4" or "0.1.4-rc.3",
         activeMods={SuQingSearchEnhancement=true,SuQingUIInteractionFixes=true,
             Codex_InventoryTransferPerformance_4221=true,NeatUI_Equipment=true,P4HasBeenRead=true},
-        p4Version="3.8.1",p4Dir=P4NEWDIR,source=SEARCH,rendererLine=376,helperLine=393}
+        p4Version="3.8.1",p4Dir=P4NEWDIR,source=SEARCH,rendererLine=376,helperLine=reviewOverlay and 398 or 393}
     for key,value in pairs(options or {}) do values[key]=value end
     return fixture(values)
 end
@@ -93,13 +109,13 @@ test("actual native Core version is accepted",function()
  local x
  if DISPLAY_NATIVE_CORE_VERSION=="42.22" then
     eq(DISPLAY_NATIVE_CORE_BUILD_VERSION,"42.22.2")
-    x=newer()
+    x=newer(nil,true)
  else
     eq(DISPLAY_NATIVE_CORE_VERSION,"42.21");eq(DISPLAY_NATIVE_CORE_BUILD_VERSION,"42.21.0")
     x=fixture({game=DISPLAY_NATIVE_CORE_VERSION,build=DISPLAY_NATIVE_CORE_BUILD_VERSION})
  end
  x:tick();eq(x.D.enabled,true)
- eq(x.D.compatRevision,"deferred-render-chain-4");eq(x.D.gameVersion,DISPLAY_NATIVE_CORE_VERSION);eq(x.D.gameBuild,DISPLAY_NATIVE_CORE_BUILD_VERSION)
+ eq(x.D.compatRevision,"deferred-render-chain-6");eq(x.D.gameVersion,DISPLAY_NATIVE_CORE_VERSION);eq(x.D.gameBuild,DISPLAY_NATIVE_CORE_BUILD_VERSION)
  check(x.logs[#x.logs]:find("display context ready",1,true)~=nil,"installation evidence")
 end)
 test("equivalent explicit old short version representation is accepted",function()
@@ -307,4 +323,60 @@ for _,spec in ipairs({
     local x=newer(spec);x:tick();eq(x.D.enabled,false);eq(x.class.renderdetails,x.prior)
  end)
 end
+test("CleanUI 2.10.6 overlay-only renderer can open a display context",function()
+ local x=newer({source=HBR,rendererLine=283,overlayMarker=true,cleanOriginal=CLEANNEW,
+     activeMods={P4HasBeenRead=true}},true)
+ x:tick();eq(x.D.enabled,true);eq(x.D.source,"CleanUI-2.10.6/HasBeenRead")
+ eq(x.class._cleanUIHasBeenReadWrapper,x.class.renderdetails)
+end)
+test("CleanUI 2.10.6 search chain preserves its reading-mark registration",function()
+ local x=newer({overlayMarker=true},true);x:tick()
+ eq(x.D.enabled,true);eq(x.D.source,"SuQingSearchEnhancement-0.1.4-rc.4/CleanUI-2.10.6")
+ eq(x.class._cleanUIHasBeenReadWrapper,x.class.renderdetails)
+end)
+test("CleanUI 2.10.6 rejects unverified overlay and wrapper metadata",function()
+ for _,options in ipairs({
+     {source=HBR,rendererLine=283,overlayMarker=true,cleanOriginal="C:/unknown/ISInventoryPane.lua"},
+     {source=HBR,rendererLine=283,overlayMarker=false,cleanOriginal=CLEANNEW},
+     {source=HBR,rendererLine=284,overlayMarker=true,cleanOriginal=CLEANNEW},
+     {source=HBR,rendererLine=283,overlayMarker=true,cleanOriginal=CLEANNEW,cleanOriginalLine=5679},
+     {helperLine=393}, {searchVersion="0.1.4-rc.3"}, {perfVersion="1.2.4"}, {proxVersion="1.0.3"},
+     {activeMods={["\\SMP_SnakeUtilsPack"]=true}},
+ }) do
+     local x=newer(options,true);x:tick();eq(x.D.enabled,false);eq(x.class.renderdetails,x.prior)
+ end
+end)
+local function latest(options)
+ local values={cleanVersion="2.10.7",searchVersion="0.1.4-rc.5",perfVersion="1.2.6",
+     proxVersion="1.0.5",helperLine=401,readingCallback=true}
+ for key,value in pairs(options or {})do values[key]=value end
+ return newer(values,true)
+end
+test("CleanUI 2.10.7 accepts only the reviewed base, transfer, proximity and search entry points",function()
+ for _,spec in ipairs({
+     {source=CLEANNEW,rendererLine=5678,label="CleanUI-2.10.7"},
+     {source=PERF,rendererLine=456,label="InventoryTransferPerformance-1.2.6/CleanUI-2.10.7"},
+     {source=PROX,rendererLine=238,label="SuQingUIInteractionFixes-1.0.5/CleanUI-2.10.7"},
+     {source=SEARCH,rendererLine=376,label="SuQingSearchEnhancement-0.1.4-rc.5/CleanUI-2.10.7"},
+ }) do
+     local x=latest(spec);x:tick();eq(x.D.enabled,true,x.D.reason);eq(x.D.source,spec.label)
+     eq(x.class._cleanUIHasBeenReadWrapper,nil)
+ end
+end)
+test("CleanUI 2.10.7 unknown callbacks, wrappers and row integrations keep immediate settlement",function()
+ for _,options in ipairs({
+     {readingCallback=false}, {readingSource="C:/unknown/CleanUI_HasBeenReadCompat.lua"},
+     {readingLine=213}, {source=HBR,rendererLine=283,overlayMarker=true,cleanOriginal=CLEANNEW},
+     {helperLine=398}, {searchVersion="0.1.4-rc.4"}, {perfVersion="1.2.5"}, {proxVersion="1.0.4"},
+     {activeMods={P4HasBeenRead=true,EURY_CONTAINERS=true}},
+     {activeMods={P4HasBeenRead=true,["\\ProjectExile"]=true}},
+ }) do
+     local x=latest(options);x:tick();eq(x.D.enabled,false);eq(x.class.renderdetails,x.prior)
+ end
+end)
+test("CleanUI 2.10.7 reading callback replacement revokes a running display scope",function()
+ local x=latest();x:tick();eq(x.D.enabled,true)
+ CleanUI_HasBeenReadDrawVisibleMarks=function()end
+ x.class.renderdetails();eq(x.D.enabled,false);eq(x.R.displayDepth,0)
+end)
 return "PASS display context cases="..cases.." checks="..checks

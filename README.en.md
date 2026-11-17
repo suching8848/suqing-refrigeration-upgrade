@@ -18,7 +18,9 @@ Approve the JAR through normal ZombieBuddy prompts. Fully exit and restart after
 
 User single-player testing and two fresh logs confirm native takeover, the old Lua sweep stopping and normal save/exit, with a reported subjective improvement. No controlled same-load FPS percentage or multiplayer acceptance is claimed.
 
-On B42.22.2, Lua display coalescing supports the Workshop CleanUI 2.10.5 42.22 branch and its audited optional inventory wrappers (Transfer Performance 1.2.4, Proximity Selection 1.0.3, Search Enhancement 0.1.4-rc.3). Unknown renderers, Snake Utils and actual actions use immediate settlement. Active Java takeover retains native food aging.
+On B42.22.2, Lua display coalescing supports the Workshop CleanUI 2.10.5 42.22 branch and its audited optional inventory wrappers (Transfer Performance 1.2.4, Proximity Selection 1.0.3, Search Enhancement 0.1.4-rc.3). Unknown renderers, Snake Utils and actual actions use immediate settlement. Active Java takeover retains native food aging. The 2.10.6 adaptation preserves Has Been Read marks and recognizes Transfer Performance 1.2.5, Proximity Selection 1.0.4 and Search Enhancement 0.1.4-rc.4. The 2.10.7 adaptation follows CleanUI’s reading-mark callback and recognizes Transfer Performance 1.2.6, Proximity Selection 1.0.5 and Search Enhancement 0.1.4-rc.5. The display compatibility revision is deferred-render-chain-6 under the existing perf.8 identifier.
+
+The current B42.22.2 single-player startup log confirms the reviewed CleanUI 2.10.7 and Search renderer was selected.
 
 ## perf.7 display-demand snapshots (2026-11-07)
 

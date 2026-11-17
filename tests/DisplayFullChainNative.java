@@ -22,9 +22,15 @@ public final class DisplayFullChainNative {
   Class<?> choose=Class.forName("zombie.gameStates.ChooseGameInfo");for(String[] row:roots){fs.getMethod("setModIdToDir",String.class,String.class).invoke(files,row[0],row[1]);Object mod=choose.getMethod("readModInfo",String.class).invoke(null,row[1]);if(mod==null)throw new IllegalStateException("Native metadata missing: "+row[0]);System.out.println("CHAIN_NATIVE_METADATA\t"+row[0]+"\t"+mod.getClass().getMethod("getModVersion").invoke(mod)+"\t"+mod.getClass().getMethod("getVersionDir").invoke(mod));}
   @SuppressWarnings("unchecked") List<String> ids=(List<String>)fs.getMethod("getModIDs").invoke(files);ids.clear();Matcher m=Pattern.compile("(?m)^\\s*mod\\s*=\\s*([^,\\r\\n]+)").matcher(new String(Files.readAllBytes(Paths.get(a[1])),StandardCharsets.UTF_8));while(m.find())ids.add(m.group(1));System.out.println("CHAIN_NATIVE_ACTIVE_IDS\t"+ids.size());
   env=manager.getField("env").get(null);thread=manager.getField("thread").get(null);table=Class.forName("se.krka.kahlua.vm.KahluaTable");compile=Class.forName("se.krka.kahlua.luaj.compiler.LuaCompiler").getMethod("loadis",Reader.class,String.class,table);pcall=thread.getClass().getMethod("pcall",Object.class,Object[].class);
-  for(int index=12;index<a.length;index++){
+  for(int index=15;index<a.length;index++){
    execute(Paths.get(a[index]));execute(Paths.get(a[2]));execute(Paths.get(a[3]));
    for(int dep=4;dep<=7;dep++)execute(Paths.get(a[dep]));
+   execute(Paths.get(a[13]));
+   Object prepare=field(field(env,"Chain"),"prepareNativePane");
+   Object[] ready=(Object[])pcall.invoke(thread,prepare,new Object[0]);
+   if(!Boolean.TRUE.equals(ready[0]))throw new IllegalStateException("Pane fixtures: "+Arrays.toString(ready));
+   execute(Paths.get(a[12]));
+   execute(Paths.get(a[14]));
    Object options=field(env,"CHAIN_OPTIONS");boolean first=Boolean.TRUE.equals(field(options,"displayFirst")),searchFirst=Boolean.TRUE.equals(field(options,"searchFirst"));
    if(first)execute(Paths.get(a[10]));
    execute(Paths.get(a[searchFirst?9:8]));execute(Paths.get(a[searchFirst?8:9]));
@@ -34,6 +40,6 @@ public final class DisplayFullChainNative {
   }
   Object world=Class.forName("zombie.iso.IsoWorld").getField("instance").get(null);
   if(world!=null){Field cell=world.getClass().getField("currentCell");if(cell.get(world)!=null)throw new IllegalStateException("Unexpected world cell");}
-  System.out.println("CHAIN_NATIVE_PASS game_started=false world_loaded=false UI_base=controlled event_bus=controlled complete_registrars=true");
+  System.out.println("CHAIN_NATIVE_PASS game_started=false world_loaded=false UI_base=actual_CleanUI_with_controlled_dependencies event_bus=controlled complete_registrars=true");
  }
 }

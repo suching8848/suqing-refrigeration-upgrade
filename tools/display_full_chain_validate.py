@@ -6,28 +6,28 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
  p=argparse.ArgumentParser();p.add_argument('--game-dir',type=Path,required=True);p.add_argument('--javac',type=Path,required=True)
  p.add_argument('--mods-list',type=Path,required=True);p.add_argument('--output-dir',type=Path,required=True)
- p.add_argument('--reviewed-ui-root',type=Path,help='Directory containing the reviewed 42.22 transfer, proximity, and Search candidates.')
+ p.add_argument('--mod-root',action='append',required=True,metavar='MOD_ID=DIR',help='Installed dependency root. Repeat for each dependency.')
  a=p.parse_args();game=a.game_dir.resolve();out=a.output_dir.resolve();out.mkdir(parents=True,exist_ok=True);classes=out/'classes';classes.mkdir(exist_ok=True)
- roots={
- 'P4HasBeenRead':Path(r'D:\steam\steamapps\workshop\content\108600\2544353492\mods\P4HasBeenRead'),
- 'CleanUI':Path(r'D:\steam\steamapps\workshop\content\108600\3437629766\mods\CleanUI'),
- 'PinyinSearch_SafeSources_4221_LocalFix':Path(r'C:\Users\15792\Zomboid\mods\Pinyin_UI_4221_LocalCompat'),
- 'Codex_InventoryTransferPerformance_4221':Path(r'C:\Users\15792\Zomboid\mods\InventoryTransferPerformance_4221_Local'),
- 'NeatUI_Equipment':Path(r'D:\steam\steamapps\workshop\content\108600\3790656296\mods\NeatUI_Equipment'),
- 'SuQingUIInteractionFixes':Path(r'C:\Users\15792\Zomboid\mods\SuQingUIInteractionFixes'),
- 'SuQingSearchEnhancement':Path(r'C:\Users\15792\Zomboid\mods\SuQingSearchEnhancement'),
- 'SuQingRefrigerationUpgrade_4221':ROOT/'mods/SuQingRefrigerationUpgrade_4221'}
- if a.reviewed_ui_root:
-  ui=a.reviewed_ui_root.resolve()
-  for mod,folder in [('Codex_InventoryTransferPerformance_4221','InventoryTransferPerformance_4221_Local'),
-                     ('SuQingUIInteractionFixes','SuQingUIInteractionFixes'),
-                     ('SuQingSearchEnhancement','SuQingSearchEnhancement')]:
-   roots[mod]=ui/folder
+ dependency_ids={
+  'P4HasBeenRead','CleanUI','PinyinSearch_SafeSources_4221_LocalFix',
+  'Codex_InventoryTransferPerformance_4221','NeatUI_Equipment',
+  'SuQingUIInteractionFixes','SuQingSearchEnhancement',
+ }
+ roots={}
+ for binding in a.mod_root:
+  mid, separator, location = binding.partition('=')
+  if not separator or mid not in dependency_ids or mid in roots:
+   p.error(f'invalid or duplicate dependency root: {binding}')
+  roots[mid]=Path(location).resolve(strict=True)
+ if dependency_ids != set(roots):
+  p.error('missing dependency roots: ' + ', '.join(sorted(dependency_ids - set(roots))))
+ roots['SuQingRefrigerationUpgrade_4221']=ROOT/'mods/SuQingRefrigerationUpgrade_4221'
+ overlay=roots['CleanUI']/'42.22/media/lua/client/Patch/CleanUI_HasBeenReadCompat.lua'
  mapping=out/'native_roots.tsv';mapping.write_text(''.join(k+'\t'+str(v)+'\n'for k,v in roots.items()),encoding='utf-8')
  search=roots['SuQingSearchEnhancement']/'42/media/lua';cold=ROOT/'mods/SuQingRefrigerationUpgrade_4221/42/media/lua'
  paths=[mapping,a.mods_list.resolve(),cold/'shared/SuQingRefrigeration/Core.lua',ROOT/'tests/display_full_chain_dependencies.lua',
  search/'shared/SuQingSearch/Core.lua',search/'shared/SuQingSearch/Text.lua',search/'client/SuQingSearch/Settings.lua',search/'client/SuQingSearch/Ordering.lua',
- roots['SuQingUIInteractionFixes']/'42/media/lua/client/SuQing_ProximitySelectionFix.lua',search/'client/SuQingSearch/Runtime.lua',cold/'client/SuQingRefrigeration_Display.lua',ROOT/'tests/display_full_chain_cases.lua']
+ roots['SuQingUIInteractionFixes']/'42/media/lua/client/SuQing_ProximitySelectionFix.lua',search/'client/SuQingSearch/Runtime.lua',cold/'client/SuQingRefrigeration_Display.lua',ROOT/'tests/display_full_chain_cases.lua',overlay,roots['CleanUI']/'42.22/media/lua/client/ISUI/ISInventoryPane.lua',roots['Codex_InventoryTransferPerformance_4221']/'42/media/lua/client/Codex_InventoryTransferPerformance.lua']
  before={str(x):sha(x)for x in paths};config=[]
  for display_first in[False,True]:
   for search_first in[False,True]:
@@ -48,6 +48,6 @@ def main():
  if len(cases)!=len(config)or'CHAIN_NATIVE_PASS'not in last:raise RuntimeError('Missing complete-chain success evidence')
  report={'result':'PASS','time':datetime.datetime.now().astimezone().isoformat(),'cases':len(cases),'checks':sum(int(x[1])for x in cases),'case_results':[dict(name=x[0],checks=int(x[1]),renderer_source=x[2],renderer_firstline=int(x[3]),proximity_firstline=int(x[4]),installed_frame=int(x[5]))for x in cases],
  'source_sha256':after,'game_started':False,'world_loaded':False,'ui_created':False,'native_core_and_metadata':True, 'active_ids_copied_from_saved_list':int(re.search(r'CHAIN_NATIVE_ACTIVE_IDS\s+(\d+)',last)[1]),
- 'scope':'Complete unchanged installed UIInteraction and Search registrar files plus complete Search Core/Text/Settings/Ordering. Native Kahlua/source/firstline/Core/ModInfo for eight roots and the selected saved IDs; controlled base renderer, ModOptions, zero players and event dispatch timing. No actual game UI, world, render geometry, performance or gameplay acceptance.'}
+ 'scope':'Full Transfer Performance, UIInteraction, Search and CleanUI 2.10.7 Has Been Read callback registrars. Native Kahlua, closure source/first line, Core and ModInfo for eight roots and the saved active IDs. Actual CleanUI inventory renderer with a controlled empty inventory pane, ModOptions, player access and event dispatch. No game UI, world, render geometry, performance or gameplay acceptance.'}
  (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print(json.dumps(report,ensure_ascii=False))
 if __name__=='__main__':main()

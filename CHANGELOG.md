@@ -1,5 +1,17 @@
 # 更新记录 / Changelog
 
+## 1.0.0-rc.2-perf.8 · deferred-render-chain-6
+
+适配 B42.22.2 上 CleanUI 2.10.7 的库存渲染和阅读标记回调。冷藏显示合并仅在通过来源检查的包装组合启用。
+
+Supports CleanUI 2.10.7 inventory rendering and its reading-mark callback on B42.22.2. Display coalescing is enabled for the reviewed renderer chain.
+
+## 1.0.0-rc.2-perf.8 · deferred-render-chain-5
+
+B42.22.2 对工坊 CleanUI 2.10.6 的 42.22 分支恢复 Lua 库存显示合并，识别阅读标记和已审阅的可选包装器。未知渲染组合及实际操作继续即时结算。
+
+B42.22.2 restores Lua inventory display coalescing for the Workshop CleanUI 2.10.6 42.22 branch, with its reading overlay and reviewed optional wrappers. Unknown renderer combinations and item actions settle immediately.
+
 2026-11-15 · Native 0.1.0-rc.2 · B42.22.2 / ZombieBuddy 2.3.4 离线交接通过，本机正式档日志有原生接管回执。 / Offline handover passed and game logs recorded activation on B42.22.2 with ZombieBuddy 2.3.4.
 
 ## B42.22.2 Lua 单人适配 / B42.22.2 single-player Lua compatibility

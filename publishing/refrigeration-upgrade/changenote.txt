@@ -1,2 +1,2 @@
-适配 B42.22.2 单人 Lua，保留 B42.21 和 perf.8 接口标识。审查后的 CleanUI 2.10.5 渲染链可合并显示结算；沿用退出重进清理。
-B42.22.2 Lua single-player compatibility with B42.21 and the perf.8 interface retained. Reviewed CleanUI 2.10.5 inventory rendering can coalesce display settlement. Includes the Lua re-entry cleanup.
+1.0.0-rc.2-perf.8 · 适配 B42.22.2 单人 CleanUI 2.10.7 库存渲染及阅读标记回调，更新已审核的库存包装组合。
+1.0.0-rc.2-perf.8 · Supports CleanUI 2.10.7 inventory drawing and reading marks on B42.22.2 single-player, with updated reviewed inventory wrappers.
